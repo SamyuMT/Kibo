@@ -9,7 +9,7 @@ import 'app/ui/themes/light_theme.dart';
 void main() async {
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
-    initialRoute: Routes.INITIAL,
+    initialRoute: Routes.HOME,
     theme: appThemeData,
     defaultTransition: Transition.fade,
     initialBinding: LoginBindling(),
