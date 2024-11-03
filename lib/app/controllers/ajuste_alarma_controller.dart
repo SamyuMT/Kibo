@@ -124,7 +124,7 @@ class AjusteAlarmaController extends GetxController {
       ),
     ).listen((Position position) {
       currentPosition.value = position; // Actualiza la posición en tiempo real
-      print('Ubicación prs:');
+      print('Ubicación:');
       print(
           'Ubicación actualizada: Latitud ${position.latitude}, Longitud ${position.longitude}');
     });
