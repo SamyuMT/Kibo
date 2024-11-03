@@ -244,7 +244,6 @@ class Bluetooth extends StatelessWidget {
             child: IconButton(
               onPressed: () {
                 controller.activateBluetooth();
-                print('Usuario');
               },
               icon: SvgPicture.asset(
                 'assets/images/bluetooth.svg',
