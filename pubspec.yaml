@@ -1,0 +1,66 @@
+name: kibo
+description: "A new Flutter project."
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+  get: ^4.6.6
+  get_storage: ^2.1.1
+  json_annotation: ^4.9.0
+  flutter_svg: ^2.0.0
+  auto_size_text: ^3.0.0
+  flutter_easyloading: ^3.0.5
+  page_transition: ^2.1.0
+  custom_navigation_bar: ^0.8.2
+  syncfusion_flutter_charts: ^27.1.53
+  flutter_map: ^4.0.0
+  latlong2: ^0.8.1
+  location: ^7.0.1
+  google_maps_flutter: ^2.2.0 # Verifica la versión más reciente
+  geolocator: ^13.0.1
+  permission_handler: ^11.3.1
+  audioplayers: ^6.1.0
+  image_picker: ^1.1.2
+  cupertino_icons: ^1.0.8
+  flutter_local_notifications: ^17.2.3
+  flutter_launcher_icons: ^0.10.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: ^2.4.13
+  json_serializable: ^6.8.0
+  flutter_lints: ^4.0.0
+
+
+flutter:
+
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/sounds/
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 600
+
+
+# Configuración de flutter_launcher_icons
+flutter_icons:
+  remove_alpha_ios: true
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"  # Cambia esta ruta al icono que deseas usar
