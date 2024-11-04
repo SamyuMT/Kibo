@@ -19,10 +19,12 @@ class AjusteAlarmaController extends GetxController {
   final AudioPlayer _audioPlayer = AudioPlayer();
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
+    await solicitarPermisoUbicacion(); // Espera a que se complete la solicitud de permiso de ubicación
+    await solicitarPermisoNotificaciones(); // Solicita el permiso de notificación solo después de que el permiso de ubicación se conceda
     initNotifications(); // Inicializar las notificaciones aquí
-    solicitarPermisoNotificaciones(); // Solicitar permisos de notificaciones
+
   }
 
   void _playAlarmSound() async {
@@ -32,6 +34,14 @@ class AjusteAlarmaController extends GetxController {
     Timer(const Duration(milliseconds: 6000), () {
       _audioPlayer.stop();
     });
+  }
+
+  Future<void> solicitarPermisoUbicacion() async {
+    if (await Permission.location.isDenied) {
+      await Permission.location.request(); // Solicitar permiso de ubicación
+    } else if (await Permission.location.isPermanentlyDenied) {
+      openAppSettings(); // Abrir ajustes si el permiso está permanentemente denegado
+    }
   }
 
   Future<void> solicitarPermisoNotificaciones() async {
@@ -79,7 +89,6 @@ class AjusteAlarmaController extends GetxController {
 
     await notificacion.show(0, title, body, notificationDetails);
   }
-
   get formKeyAnalitica => null;
 
   // Variable que controla el estado del switch (true = on, false = off)
