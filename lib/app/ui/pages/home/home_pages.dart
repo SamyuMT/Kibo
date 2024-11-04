@@ -68,21 +68,26 @@ class Central extends StatelessWidget {
           Obx(() {
             return Bluetooth(
               controller: controller,
-              activate: controller.activate.value,
+              activate: controller.isBluetoothEnabled.value,
             );
           }),
-
-          // Cambia el texto según el estado de activate
+          Vincular(),
+          // El widget Corazon también puede observar activate si es necesario
+          Obx(() {
+            return Corazon(
+              activate: controller.conect.value,
+            );
+          }),
           Container(
             constraints: const BoxConstraints.expand(height: 48),
             child: Obx(() {
               return Text(
-                controller.activate.value
+                controller.conect.value
                     ? 'Tu dispositivo está conectado'
                     : 'Tu dispositivo está desactivado',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: controller.activate.value
+                  color: controller.conect.value
                       ? AppColors.blanco
                       : AppColors.negro,
                   fontSize: 24,
@@ -96,12 +101,6 @@ class Central extends StatelessWidget {
             }),
           ),
 
-          // El widget Corazon también puede observar activate si es necesario
-          Obx(() {
-            return Corazon(
-              activate: controller.activate.value,
-            );
-          }),
         ],
       ),
     );
@@ -116,13 +115,13 @@ class Corazon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 168,
-      width: 172,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      height: 92.89,
+      width: 100,
+      padding: const EdgeInsets.symmetric(horizontal: 6.9, vertical: 6.9),
       decoration: ShapeDecoration(
         color: AppColors.blanco,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(29.66),
+          borderRadius: BorderRadius.circular(17.24),
         ),
         shadows: const [
           BoxShadow(
@@ -140,8 +139,8 @@ class Corazon extends StatelessWidget {
         children: [
           SvgPicture.asset(
             'assets/images/Corazon.svg',
-            width: 148,
-            height: 136,
+            width: 86,
+            height: 79,
             color: activate ? AppColors.azul : AppColors.negro,
           ),
         ], // Cierra correctamente el 'children'
@@ -243,7 +242,11 @@ class Bluetooth extends StatelessWidget {
             constraints: const BoxConstraints(maxWidth: 69, maxHeight: 113),
             child: IconButton(
               onPressed: () {
-                controller.activateBluetooth();
+                if (controller.isBluetoothEnabled.value) {
+                  controller.deactivateBluetooth();
+                } else {
+                  controller.activateBluetooth();
+                }
               },
               icon: SvgPicture.asset(
                 'assets/images/bluetooth.svg',
@@ -265,6 +268,77 @@ class Bluetooth extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class Vincular extends StatefulWidget {
+  const Vincular({super.key});
+
+  @override
+  _VincularState createState() => _VincularState();
+}
+
+class _VincularState extends State<Vincular> {
+  // Estado para verificar si el botón está presionado
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        InkWell(
+          onTapDown: (_) {
+            // Cambia el estado a presionado
+            setState(() {
+              _isPressed = true;
+            });
+          },
+          onTapUp: (_) {
+            // Cambia el estado a no presionado
+            setState(() {
+              _isPressed = false;
+            });
+            // Aquí puedes añadir la lógica que ocurre cuando se presiona el botón
+            print('Botón presionado');
+          },
+          onTapCancel: () {
+            // Cambia el estado a no presionado si el toque es cancelado
+            setState(() {
+              _isPressed = false;
+            });
+          },
+          child: Container(
+            width: 263,
+            height: 56,
+            padding: const EdgeInsets.all(16),
+            clipBehavior: Clip.antiAlias,
+            decoration: ShapeDecoration(
+              color: _isPressed ? Colors.grey[300] : Colors.white, // Color diferente si está presionado
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(56),
+              ),
+            ),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'VINCULAR DISPOSITIVO', // Asegúrate de corregir el typo "DISPOTIVO" a "DISPOSITIVO"
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
