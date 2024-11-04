@@ -10,14 +10,41 @@ class HomeController extends GetxController {
   get formKeyHome => null;
   var isBluetoothEnabled = false.obs; // Observable para el estado de Bluetooth
   var isPermissionGranted = false.obs; // Observable para el estado de permisos
+  // Lista de dispositivos encontrados
+  var availableDevices = <BluetoothDevice>[].obs;
   var conect = false.obs;
 
 
-  @override
-  void onInit() {
-    super.onInit();
-    checkBluetoothStatus();
+
+  // Función para escanear dispositivos Bluetooth
+  Future<void> scanDevices() async {
+    availableDevices.clear();
+    // Inicia el escaneo
+    FlutterBluePlus.startScan(timeout: const Duration(seconds: 4));
+
+    // Escucha los dispositivos encontrados y agrégalos a la lista
+    FlutterBluePlus.scanResults.listen((results) {
+      for (ScanResult result in results) {
+        if (!availableDevices.contains(result.device)) {
+          availableDevices.add(result.device);
+        }
+      }
+    });
+    // Para el escaneo después del tiempo límite
+    await Future.delayed(const Duration(seconds: 4));
+    FlutterBluePlus.stopScan();
   }
+
+  // Conectarse al dispositivo seleccionado
+  Future<void> connectToDevice(BluetoothDevice device) async {
+    try {
+      await device.connect();
+      print('Conectado a ${device.name}');
+    } catch (e) {
+      print('Error al conectar: $e');
+    }
+  }
+
 
   // Revisa el estado inicial de Bluetooth y permisos
   Future<void> checkBluetoothStatus() async {
@@ -120,7 +147,6 @@ class HomeController extends GetxController {
       print("Permiso de Bluetooth denegado.");
     }
   }
-
 
   // Desactiva Bluetooth y actualiza el estado
   Future<void> deactivateBluetooth() async {

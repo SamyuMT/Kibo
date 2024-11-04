@@ -71,7 +71,7 @@ class Central extends StatelessWidget {
               activate: controller.isBluetoothEnabled.value,
             );
           }),
-          Vincular(),
+          Vincular(), // Aquí le pasamos el controlador
           // El widget Corazon también puede observar activate si es necesario
           Obx(() {
             return Corazon(
@@ -280,8 +280,48 @@ class Vincular extends StatefulWidget {
 }
 
 class _VincularState extends State<Vincular> {
+  final HomeController homeController = Get.put(HomeController()); // Instancia de HomeController
   // Estado para verificar si el botón está presionado
   bool _isPressed = false;
+
+  void _showConnectionOverlay() {
+    homeController.scanDevices(); // Escanea dispositivos al abrir el overlay
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Obx(() => AlertDialog(
+          title: const Text('Selecciona un dispositivo'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Lista de dispositivos encontrados
+              if (homeController.availableDevices.isNotEmpty)
+                ...homeController.availableDevices.map((device) => ListTile(
+                  title: Text(device.name),
+                  subtitle: Text(device.id.toString()),
+                  onTap: () async {
+                    await homeController.connectToDevice(device);
+                    homeController.conect.value = true; // Cambia estado a conectado
+                    Navigator.of(context).pop(); // Cierra el overlay
+                    Get.snackbar("Conexión", "Conectado a ${device.name}", snackPosition: SnackPosition.BOTTOM);
+                  },
+                )),
+              if (homeController.availableDevices.isEmpty)
+                const Center(child: CircularProgressIndicator()), // Muestra un cargando si no hay dispositivos
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cierra el overlay sin conectar
+              },
+              child: const Text('Cancelar'),
+            ),
+          ],
+        ));
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -301,6 +341,7 @@ class _VincularState extends State<Vincular> {
             });
             // Aquí puedes añadir la lógica que ocurre cuando se presiona el botón
             print('Botón presionado');
+            _showConnectionOverlay();
           },
           onTapCancel: () {
             // Cambia el estado a no presionado si el toque es cancelado
@@ -342,3 +383,4 @@ class _VincularState extends State<Vincular> {
     );
   }
 }
+
