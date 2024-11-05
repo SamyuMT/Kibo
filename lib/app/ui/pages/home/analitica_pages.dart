@@ -81,6 +81,12 @@ class _CentralState extends State<Central> {
             return HeartRete(
                 heartRateStream: widget.controller.heartRate.value);
           }),
+          Obx(() => Text(
+            'Datos recibidos: ${widget.controller.dataBt.value}',
+            style: const TextStyle(fontSize: 16,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w500),
+          )),
           Tendencia(controller: widget.controller),
           Widgetprediccion(controller: widget.controller),
           // Cambia el texto según el estado de activate

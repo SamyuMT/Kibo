@@ -5,14 +5,12 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:math'; // Importación para generar números aleatorios
-import 'package:kibo/app/controllers/home_controller.dart';
 
 class AnaliticaController extends GetxController {
-  final bluetoothController = Get.find<HomeController>();
 
   get formKeyAnalitica => null;
 
-  var heartRate = 100.obs; // Valor inicial de 100 bpm
+  var heartRate = 20.obs; // Valor inicial de 100 bpm
   var tendencia1 =
       ''.obs; // Usamos .obs si estamos usando GetX para observabilidad
   var tendencia2 =
@@ -31,6 +29,9 @@ class AnaliticaController extends GetxController {
 
   int currentIndex = 0;
   int indice = 0;
+
+  BluetoothCharacteristic? characteristic;
+  RxString dataBt = ''.obs; // Observable para datos recibidos
 
 
   void updateHeartRateHistory1() {
@@ -57,10 +58,11 @@ class AnaliticaController extends GetxController {
   void startHeartRateSimulation() {
     final random = Random();
 
-    Timer.periodic(const Duration(milliseconds: 1000), (timer) {
+    Timer.periodic(const Duration(milliseconds: 800), (timer) {
       // Generar un valor aleatorio entre 20 y 150
-      heartRate.value = int.parse(bluetoothController.receivedData.value);
+      heartRate.value = int.tryParse(dataBt.value) ?? heartRate.value; // Usar el valor de dataBt
       //heartRate.value = 40 + random.nextInt(110);
+
       updateHeartRateHistory1(); // Actualiza el historial de frecuencia cardíaca para graficarlo
     });
   }
@@ -80,6 +82,7 @@ class ChartData1 {
   ChartData1(this.time, this.value);
 }
 
+
 class HeartRateChart1 extends StatelessWidget {
   final AnaliticaController controller = Get.put(AnaliticaController());
 
@@ -93,8 +96,8 @@ class HeartRateChart1 extends StatelessWidget {
               isVisible: false,
             ),
             primaryYAxis: const NumericAxis(
-              minimum: 20,
-              maximum: 170,
+              minimum: 0,
+              maximum: 150,
               isVisible: true,
               labelStyle: const TextStyle(
                 color: AppColors.negro,
@@ -127,7 +130,7 @@ class HeartRateChart1 extends StatelessWidget {
                   ],
                   stops: const [0.0, 1.0],
                 ),
-                animationDuration: 900,
+                animationDuration: 600,
                 // Suavizar la animación
                 splineType: SplineType.monotonic, // Para una curva más suave
               ),

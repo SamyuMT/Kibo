@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
+
 class HomePage extends GetView<HomeController> {
   const HomePage({super.key});
 
@@ -382,10 +383,6 @@ class _VincularState extends State<Vincular> {
           ),
         ),
         const SizedBox(height: 20),
-        Obx(() => Text(
-          'Datos recibidos: ${homeController.receivedData.value}',
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-        )),
       ],
     );
   }

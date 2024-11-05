@@ -8,6 +8,9 @@ import 'package:get/get.dart';
 
 
 class HomeController extends GetxController {
+  final Controller = Get.find<AnaliticaController>();
+
+
   get formKeyHome => null;
   var isBluetoothEnabled = false.obs; // Observable para el estado de Bluetooth
   var isPermissionGranted = false.obs; // Observable para el estado de permisos
@@ -56,10 +59,10 @@ class HomeController extends GetxController {
   Future<void> connectToDevice(BluetoothDevice device) async {
     try {
       await device.connect();
+
       print('Conectado a ${device.name}');
       connectedDevice = device; // Guarda el dispositivo conectado
       escucharDatos(device); // Llama a escucharDatos después de conectar
-
     } catch (e) {
       print('Error al conectar: $e');
     }
@@ -80,8 +83,11 @@ class HomeController extends GetxController {
             // Escucha los cambios de valor en la característica
             characteristic!.value.listen((value) {
               // Convierte los datos a string y actualiza el observable
-              receivedData.value = String.fromCharCodes(value);
-              print('Datos recibidos: ${receivedData.value}');
+              String receivedValue = String.fromCharCodes(value);
+              print('Datos recibidos: $receivedValue');
+              receivedData.value = receivedValue;
+              // Actualiza el observable en el AnaliticaController
+              Controller.dataBt.value = receivedValue;
             });
           }
         }
@@ -90,6 +96,7 @@ class HomeController extends GetxController {
       print('Error al escuchar datos: $e');
     }
   }
+
 
   // Revisa el estado inicial de Bluetooth y permisos
   Future<void> checkBluetoothStatus() async {
