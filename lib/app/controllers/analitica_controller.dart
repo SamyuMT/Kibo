@@ -1,11 +1,15 @@
 import 'dart:async';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:kibo/app/ui/utils/style_utils.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:math'; // Importación para generar números aleatorios
+import 'package:kibo/app/controllers/home_controller.dart';
 
 class AnaliticaController extends GetxController {
+  final bluetoothController = Get.find<HomeController>();
+
   get formKeyAnalitica => null;
 
   var heartRate = 100.obs; // Valor inicial de 100 bpm
@@ -28,6 +32,7 @@ class AnaliticaController extends GetxController {
   int currentIndex = 0;
   int indice = 0;
 
+
   void updateHeartRateHistory1() {
     if (heartRateHistory1.length >= 10) {
       heartRateHistory1.removeAt(0);
@@ -47,14 +52,16 @@ class AnaliticaController extends GetxController {
     });
   }
 
+
   // Simulación de frecuencia cardíaca cada 1 segundo con valores aleatorios entre 20 y 150
   void startHeartRateSimulation() {
     final random = Random();
 
     Timer.periodic(const Duration(milliseconds: 1000), (timer) {
       // Generar un valor aleatorio entre 20 y 150
-      heartRate.value = 40 + random.nextInt(110);
-      updateHeartRateHistory1();
+      heartRate.value = int.parse(bluetoothController.receivedData.value);
+      //heartRate.value = 40 + random.nextInt(110);
+      updateHeartRateHistory1(); // Actualiza el historial de frecuencia cardíaca para graficarlo
     });
   }
 

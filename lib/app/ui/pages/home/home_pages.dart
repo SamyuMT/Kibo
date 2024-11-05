@@ -340,8 +340,10 @@ class _VincularState extends State<Vincular> {
               _isPressed = false;
             });
             // Aquí puedes añadir la lógica que ocurre cuando se presiona el botón
-            print('Botón presionado');
-            _showConnectionOverlay();
+            if(homeController.isBluetoothEnabled.value == true) {
+              print('Botón presionado');
+              _showConnectionOverlay();
+            }
           },
           onTapCancel: () {
             // Cambia el estado a no presionado si el toque es cancelado
@@ -379,6 +381,11 @@ class _VincularState extends State<Vincular> {
             ),
           ),
         ),
+        const SizedBox(height: 20),
+        Obx(() => Text(
+          'Datos recibidos: ${homeController.receivedData.value}',
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        )),
       ],
     );
   }
