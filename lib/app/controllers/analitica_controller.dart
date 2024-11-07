@@ -35,7 +35,7 @@ class AnaliticaController extends GetxController {
 
 
   void updateHeartRateHistory1() {
-    if (heartRateHistory1.length >= 10) {
+    if (heartRateHistory1.length >= 50) {
       heartRateHistory1.removeAt(0);
     }
     heartRateHistory1.add(ChartData1(DateTime.now(), heartRate.value));
@@ -58,7 +58,7 @@ class AnaliticaController extends GetxController {
   void startHeartRateSimulation() {
     final random = Random();
 
-    Timer.periodic(const Duration(milliseconds: 800), (timer) {
+    Timer.periodic(const Duration(milliseconds: 40), (timer) {
       // Generar un valor aleatorio entre 20 y 150
       heartRate.value = int.tryParse(dataBt.value) ?? heartRate.value; // Usar el valor de dataBt
       //heartRate.value = 40 + random.nextInt(110);
@@ -97,7 +97,7 @@ class HeartRateChart1 extends StatelessWidget {
             ),
             primaryYAxis: const NumericAxis(
               minimum: 0,
-              maximum: 150,
+              maximum: 600,
               isVisible: true,
               labelStyle: const TextStyle(
                 color: AppColors.negro,
@@ -130,7 +130,7 @@ class HeartRateChart1 extends StatelessWidget {
                   ],
                   stops: const [0.0, 1.0],
                 ),
-                animationDuration: 600,
+                animationDuration: 10,
                 // Suavizar la animación
                 splineType: SplineType.monotonic, // Para una curva más suave
               ),
