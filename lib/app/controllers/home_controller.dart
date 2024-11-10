@@ -29,31 +29,26 @@ class HomeController extends GetxController {
   // Función para escanear dispositivos Bluetooth
 // Función para escanear dispositivos Bluetooth y obtener dispositivos vinculados
   Future<void> scanDevices() async {
-    // Limpia ambas listas antes de un nuevo escaneo
     availableDevices.clear();
     pairedDevices.clear();
 
-    // Obtener dispositivos vinculados (ya conectados)
+    // Escanea dispositivos vinculados
     List<BluetoothDevice> connectedDevices = await FlutterBluePlus.connectedDevices;
     pairedDevices.addAll(connectedDevices);
 
-    // Inicia el escaneo de dispositivos disponibles
+    // Escanea dispositivos disponibles
     FlutterBluePlus.startScan(timeout: const Duration(seconds: 4));
-
-    // Escucha los dispositivos encontrados y agrégalos a la lista
     FlutterBluePlus.scanResults.listen((results) {
       for (ScanResult result in results) {
-        if (!availableDevices.contains(result.device)) {
+        if (!availableDevices.contains(result.device) && !pairedDevices.contains(result.device)) {
           availableDevices.add(result.device);
         }
       }
     });
 
-    // Detiene el escaneo después del tiempo límite
     await Future.delayed(const Duration(seconds: 4));
     FlutterBluePlus.stopScan();
   }
-
 
   // Conectarse al dispositivo seleccionado
   Future<void> connectToDevice(BluetoothDevice device) async {

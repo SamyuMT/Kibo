@@ -286,35 +286,71 @@ class _VincularState extends State<Vincular> {
   bool _isPressed = false;
 
   void _showConnectionOverlay() {
-    homeController.scanDevices(); // Escanea dispositivos al abrir el overlay
+    homeController.scanDevices();
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return Obx(() => AlertDialog(
           title: const Text('Selecciona un dispositivo'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Lista de dispositivos encontrados
-              if (homeController.availableDevices.isNotEmpty)
-                ...homeController.availableDevices.map((device) => ListTile(
-                  title: Text(device.name),
-                  subtitle: Text(device.id.toString()),
-                  onTap: () async {
-                    await homeController.connectToDevice(device);
-                    homeController.conect.value = true; // Cambia estado a conectado
-                    Navigator.of(context).pop(); // Cierra el overlay
-                    Get.snackbar("Conexión", "Conectado a ${device.name}", snackPosition: SnackPosition.BOTTOM);
-                  },
-                )),
-              if (homeController.availableDevices.isEmpty)
-                const Center(child: CircularProgressIndicator()), // Muestra un cargando si no hay dispositivos
-            ],
+          content: SizedBox(
+            width: double.maxFinite,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (homeController.pairedDevices.isNotEmpty) ...[
+                    const Text('Dispositivos Vinculados', style: TextStyle(fontWeight: FontWeight.bold)),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: homeController.pairedDevices.length,
+                      itemBuilder: (context, index) {
+                        final device = homeController.pairedDevices[index];
+                        return ListTile(
+                          title: Text(device.name),
+                          subtitle: Text(device.id.toString()),
+                          onTap: () async {
+                            await homeController.connectToDevice(device);
+                            homeController.conect.value = true;
+                            Navigator.of(context).pop();
+                            Get.snackbar("Conexión", "Conectado a ${device.name}", snackPosition: SnackPosition.BOTTOM);
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                  if (homeController.availableDevices.isNotEmpty) ...[
+                    const SizedBox(height: 10),
+                    const Text('Dispositivos Disponibles', style: TextStyle(fontWeight: FontWeight.bold)),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: homeController.availableDevices.length,
+                      itemBuilder: (context, index) {
+                        final device = homeController.availableDevices[index];
+                        return ListTile(
+                          title: Text(device.name),
+                          subtitle: Text(device.id.toString()),
+                          onTap: () async {
+                            await homeController.connectToDevice(device);
+                            homeController.conect.value = true;
+                            Navigator.of(context).pop();
+                            Get.snackbar("Conexión", "Conectado a ${device.name}", snackPosition: SnackPosition.BOTTOM);
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                  if (homeController.availableDevices.isEmpty && homeController.pairedDevices.isEmpty)
+                    const Center(child: CircularProgressIndicator()),
+                ],
+              ),
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Cierra el overlay sin conectar
+                Navigator.of(context).pop();
               },
               child: const Text('Cancelar'),
             ),
@@ -323,6 +359,7 @@ class _VincularState extends State<Vincular> {
       },
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
