@@ -22,7 +22,7 @@ void main() async {
 
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
-    initialRoute: Routes.NAVBAR,
+    initialRoute: Routes.INITIAL,
     theme: appThemeData,
     defaultTransition: Transition.fade,
     initialBinding: LoginBindling(),
