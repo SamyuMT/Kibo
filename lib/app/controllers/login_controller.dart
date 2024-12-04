@@ -1,9 +1,15 @@
+import 'package:kibo/app/data/provider/login_provider.dart';
+import 'package:kibo/app/data/repository/login_repository.dart';
 import 'package:kibo/app/routes/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import '../data/model/user/user.dart';
+
 class LoginController extends GetxController {
+  LoginRepository loginRepository = LoginRepository();
+
   final UserController = TextEditingController(); // Controlador para User
   final passwordController =
       TextEditingController(); // Controlador para contraseña
@@ -23,35 +29,30 @@ class LoginController extends GetxController {
     print(isButtonEnabled.value);
   }
 
-  void validateCredentials() {
-    const List<String> correctUser = [
-      'jemycraft12@hotmail.com',
-      '3052264620'
-    ]; // User correcto
-    const String correctPassword = '1234'; // Contraseña correcta
-
-    // Verifica si el correo y la contraseña son correctos
-    if (!correctUser.contains(UserController.text)) {
-      isUserAlert.value = true;
-    } else {
-      isUserAlert.value = false; // Restablece la alerta si son correctos
-    }
-    if (passwordController.text != correctPassword) {
-      isPasswordAlert.value = true;
-    } else {
-      isPasswordAlert.value = false; // Restablece la alerta si son correctos
-    }
-
+  void validateCredentials() async {
     try {
-      if (isPasswordAlert.value || isUserAlert.value) {
-        throw 'Credenciales incorrectas'; // Si hay error en el User o password, lanza la excepción
-      } else {
-        EasyLoading.showSuccess('Inicio de sesión exitoso');
-        clearLoginData(); // Limpia la información antes de navegar
-        Get.toNamed(Routes.NAVBAR);
-      }
+    User user = await getDataUser();
+    List<String> correctUser = [
+      user.data.email,
+      user.data.cel_number
+    ]; // User correcto
+    String id = user.data.id;
+    // Verifica si el correo y la contraseña son correctos
+    if (correctUser.contains(UserController.text)) {
+      isUserAlert.value = false;
+      isPasswordAlert.value = false;
+    }
+    if (!isPasswordAlert.value || !isUserAlert.value) {
+      EasyLoading.showSuccess('Inicio de sesión exitoso.\n'
+          'Bienevenido $id');
+      clearLoginData(); // Limpia la información antes de navegar
+      Get.toNamed(Routes.NAVBAR);
+    }
     } catch (e) {
       EasyLoading.showInfo(e.toString()); // Muestra el mensaje de error
+      isUserAlert.value = true;
+      isPasswordAlert.value = true;
+
     }
   }
 
@@ -67,8 +68,15 @@ class LoginController extends GetxController {
   void backLoginRegister() {
     Get.toNamed(Routes.LOGINREGISTER);
   }
+  Future<User> getDataUser() async{
+    User body = await loginRepository.getDataUser(credential: UserController.text, pass: passwordController.text);
+    return body;
+  }
 
   @override
+  void onReady() {
+    super.onReady();
+  }
   void onClose() {
     // Asegúrate de limpiar los controladores al cerrar el controlador
     UserController.dispose();
