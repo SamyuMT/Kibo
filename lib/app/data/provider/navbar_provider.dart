@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:get/get_connect/connect.dart';
 
@@ -77,7 +78,6 @@ class NavbarProvider extends GetConnect {
       throw 'Problemas de conexion';
     }
   }
-
 
 
 

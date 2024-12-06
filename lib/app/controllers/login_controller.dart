@@ -175,6 +175,8 @@ class LoginController extends GetxController {
     print("La institucion $institucion");
     return doctorUser;
   }
+
+
   void onClose() {
     // Asegúrate de limpiar los controladores al cerrar el controlador
     UserController.dispose();

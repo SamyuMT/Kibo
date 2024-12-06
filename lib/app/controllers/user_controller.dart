@@ -21,8 +21,10 @@ class UserController extends GetxController {
 
   Future<void> fetchRemoteImage(String imageUrl) async {
     try {
+      print('Cargando imagen de URL: $imageUrl');
       final imageData = await imageProvider.getImageUser(imgUrl: imageUrl);
       if (imageData != null) {
+        print('hola');
         remoteImage.value = imageData; // Actualiza la imagen remota
       }
     } catch (e) {
@@ -30,19 +32,6 @@ class UserController extends GetxController {
     }
   }
 
-  void onReady() {
-    final box = GetStorage();
-    userName = box.read('user_name');
-    userLastName = box.read('user_name_last');
-    userNickName = box.read('user_nickname');
-    userEmail = box.read('user_email');
-    userNumber = box.read('user_number');
-    userCity = box.read('user_city');
-    userRol = box.read('user_rol');
-    fetchRemoteImage(box.read('user_img_url'));
-    update(); // Notifica los cambios
-    super.onReady();
-  }
 
   var selectedImage = Rxn<File>(); // Ahora es reactiva
 
@@ -74,6 +63,21 @@ class UserController extends GetxController {
   // Método para actualizar la imagen
   void updateImage(File? image) {
     selectedImage.value = image; // Actualiza el valor reactivo
+  }
+
+  @override
+  Future<void> onReady() async {
+    final box = GetStorage();
+    userName = box.read('user_name');
+    userLastName = box.read('user_name_last');
+    userNickName = box.read('user_nickname');
+    userEmail = box.read('user_email');
+    userNumber = box.read('user_number');
+    userCity = box.read('user_city');
+    userRol = box.read('user_rol');
+    fetchRemoteImage(box.read('user_img_url'));
+    update(); // Notifica los cambios
+    super.onReady();
   }
 }
 
