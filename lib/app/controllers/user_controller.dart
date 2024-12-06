@@ -1,12 +1,49 @@
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:get_storage/get_storage.dart';
 import 'package:kibo/app/ui/utils/style_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../data/provider/image_user_provider.dart';
+import 'navbar_controller.dart';
+
 class UserController extends GetxController {
+  final NavbarController navbarController = Get.find<NavbarController>();  // Instancia del NavbarController
+
+
+  final UserImageScreen imageProvider = UserImageScreen(); // Instancia del proveedor
+
+  var remoteImage = Rxn<Uint8List>(); // Imagen remota reactiva
+
+  Future<void> fetchRemoteImage(String imageUrl) async {
+    try {
+      final imageData = await imageProvider.getImageUser(imgUrl: imageUrl);
+      if (imageData != null) {
+        remoteImage.value = imageData; // Actualiza la imagen remota
+      }
+    } catch (e) {
+      print('Error al cargar la imagen remota: $e');
+    }
+  }
+
+  void onReady() {
+    final box = GetStorage();
+    userName = box.read('user_name');
+    userLastName = box.read('user_name_last');
+    userNickName = box.read('user_nickname');
+    userEmail = box.read('user_email');
+    userNumber = box.read('user_number');
+    userCity = box.read('user_city');
+    userRol = box.read('user_rol');
+    fetchRemoteImage(box.read('user_img_url'));
+    update(); // Notifica los cambios
+    super.onReady();
+  }
+
   var selectedImage = Rxn<File>(); // Ahora es reactiva
 
   final TextEditingController textControllerUser =
@@ -15,19 +52,21 @@ class UserController extends GetxController {
       TextEditingController(); // Controlador para Email
 
   get formKeyAnalitica => null;
-  String userNickName = 'SamMT';
-  String userName = 'Jereminth Muñoz';
-  String userEmail = 'JemyCraft12@hotmail.com';
-  String userNumber = '3052264620';
-  String userCity = 'Yumbo';
+  String userRol = '';
+  String userNickName = '';
+  String userName = '';
+  String userLastName = '';
+  String userEmail = '';
+  String userNumber = '';
+  String userCity = '';
 
   // Método para actualizar los datos
   void updateUser(
-      String name, String email, String nick, String number, String city) {
+      String name,String lastName, String email, String nick, String number) {
     userName = name;
+    userLastName = lastName;
     userEmail = email;
     userNickName = nick;
-    userCity = city;
     userNumber = number;
     update(); // Notifica a la UI que se actualizó el estado
   }
@@ -68,6 +107,8 @@ class EditarIco extends StatelessWidget {
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -80,9 +121,10 @@ class EditarIco extends StatelessWidget {
             decoration: ShapeDecoration(
               image: DecorationImage(
                 image: controller.selectedImage.value != null
-                    ? FileImage(controller
-                        .selectedImage.value!) // Mostrar imagen seleccionada
-                    : const AssetImage("assets/images/image.jpg")
+                    ? FileImage(controller.selectedImage.value!) // Mostrar imagen seleccionada
+                    : controller.remoteImage.value != null
+                        ? MemoryImage(controller.remoteImage.value!)
+                        : const AssetImage("assets/images/image.jpg")
                         as ImageProvider,
                 fit: BoxFit.fill,
               ),

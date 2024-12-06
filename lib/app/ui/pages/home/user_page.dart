@@ -129,16 +129,16 @@ class Perfilinferior extends StatelessWidget {
                   etiqueta: controller.userName,
                 ),
                 Modulestest(
+                  id: 'Apellido',
+                  etiqueta: controller.userLastName,
+                ),
+                Modulestest(
                   id: 'Número de celular',
                   etiqueta: controller.userNumber,
                 ),
                 Modulestest(
                   id: 'Correo electrónico',
                   etiqueta: controller.userEmail,
-                ),
-                Modulestest(
-                  id: 'Ciudad',
-                  etiqueta: controller.userCity,
                 ),
               ],
             ),
@@ -282,10 +282,10 @@ class Editar extends StatelessWidget {
                 context: context,
                 builder: (context) {
                   String newNickName = controller.userNickName;
+                  String newLastName = controller.userLastName;
                   String newName = controller.userName;
                   String newNumber = controller.userNumber;
                   String newEmail = controller.userEmail;
-                  String newCity = controller.userCity;
 
                   return AlertDialog(
                     title: const Text(
@@ -334,6 +334,23 @@ class Editar extends StatelessWidget {
                         ),
                         TextField(
                           onChanged: (value) {
+                            newName = value;
+                          },
+                          decoration: const InputDecoration(
+                            labelText: 'Apellido',
+                            labelStyle: TextStyle(
+                              color: AppColors.negro,
+                              fontSize: 14,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          controller:
+                          TextEditingController(text: controller.userLastName),
+                        ),
+
+                        TextField(
+                          onChanged: (value) {
                             newNumber = value;
                           },
                           decoration: const InputDecoration(
@@ -364,29 +381,13 @@ class Editar extends StatelessWidget {
                           controller:
                               TextEditingController(text: controller.userEmail),
                         ),
-                        TextField(
-                          onChanged: (value) {
-                            newCity = value;
-                          },
-                          decoration: const InputDecoration(
-                            labelText: 'Ciudad',
-                            labelStyle: TextStyle(
-                              color: AppColors.negro,
-                              fontSize: 14,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          controller:
-                              TextEditingController(text: controller.userCity),
-                        ),
                       ],
                     ),
                     actions: [
                       TextButton(
                         onPressed: () {
-                          controller.updateUser(newName, newEmail, newNickName,
-                              newNumber, newCity);
+                          controller.updateUser(newName,newLastName, newEmail, newNickName,
+                              newNumber);
                           Navigator.of(context).pop();
                         },
                         child: const Text(
@@ -464,7 +465,7 @@ class EditarText extends StatelessWidget {
                 ),
               ),
               Text(
-                controller.userEmail,
+                controller.userRol,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: AppColors.negro,

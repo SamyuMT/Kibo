@@ -12,14 +12,8 @@ import 'app/controllers/home_controller.dart';
 import 'app/ui/themes/light_theme.dart';
 
 void main() async {
-
   Get.put(AnaliticaController());
   Get.put(HomeController());
-  Get.put(AjusteAlarmaController());
-  Get.put(AjustesUserController());
-  Get.put(UserController());
-
-
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
     initialRoute: Routes.INITIAL,

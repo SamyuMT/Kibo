@@ -9,9 +9,9 @@ class User {
   UserData data;
 
   User({
+    required this.data,
     required this.message,
     required this.status,
-    required this.data,
   });
 
   factory User.fromJson(Map<String, dynamic> data) =>

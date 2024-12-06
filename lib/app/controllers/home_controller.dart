@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 
 
+
 class HomeController extends GetxController {
   final Controller = Get.find<AnaliticaController>();
 
@@ -215,5 +216,10 @@ class HomeController extends GetxController {
       flags: <int>[Flag.FLAG_ACTIVITY_NEW_TASK],
     );
     intent.launch();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
   }
 }

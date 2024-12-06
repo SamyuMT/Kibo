@@ -1,13 +1,13 @@
-import '../model/user/user.dart';
+import '../model/credential/credential.dart';
 import '../provider/login_provider.dart';
 
-LoginProvider loginProvider = LoginProvider();
+LoginProvider credentialProvider = LoginProvider();
 
 class LoginRepository {
-  Future<User> getDataUser({required String credential, required String pass}) async{
-    final raw = await loginProvider.getDataUser(credential: credential, pass: pass);
+  Future<Credential> getDataCredential({required String credential, required String pass}) async{
+    final raw = await credentialProvider.getDataCredential(credential: credential, pass: pass);
     final data = raw.body;
-    User user = User.fromJson(data);
+    Credential user = Credential.fromJson(data);
     return user;
   }
 }

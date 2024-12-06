@@ -1,3 +1,4 @@
+import 'package:get_storage/get_storage.dart';
 import 'package:kibo/app/routes/pages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -6,30 +7,67 @@ import 'package:get/get.dart';
 class AjustesUserController extends GetxController {
   get formKeyAnalitica => GlobalKey<FormState>();
 
+  void onReady() {
+    final box = GetStorage();
+    generoText.value = box.read('user_gender');
+    tipoDocumentoText.value = box.read('user_type_doc');
+    departamentoText.value = box.read('user_departament');
+    municipioOCiudadText.value = box.read('user_city');
+    barrioText.value = box.read('user_neighborhood');
+    tipoDeCalleText.value = box.read('user_type_street');
+    calleText.value = box.read('user_street_number');
+    numeroText.value = box.read('user_house_number');
+    numeroDocumentoText.value = box.read('user_doc_number');
+
+
+    nombreTextEmergencia.value = box.read('emergency_full_name');
+    generoTextEmergencia.value = box.read('emergency_gender');
+    tipoDocumentoTextEmergencia.value = box.read('emergency_type_doc');
+    departamentoTextEmergencia.value = box.read('emergency_departament');
+    municipioOCiudadTextEmergencia.value = box.read('emergency_city');
+    barrioTextEmergencia.value = box.read('emergency_neighborhood');
+    tipoDeCalleTextEmergencia.value = box.read('emergency_type_street');
+    calleTextEmergencia.value = box.read('emergency_street_number');
+    numeroTextEmergencia.value = box.read('emergency_house_number');
+    numeroDocumentoTextEmergencia.value = box.read('emergency_doc_number');
+    numeroCelularTextEmergencia.value = box.read('emergency_cel_mobile');
+    parentescoEmergencia.value = box.read('emergency_relationship');
+
+    aseguradoraTextEmergencia.value = box.read('medical_insurance');
+    tipoVinculacionTextEmergencia.value = box.read('medical_type_link');
+    nombreMedicoTextEmergencia.value = box.read('doctor_full_name');
+    especialidadMedicoTextEmergencia.value = box.read('doctor_specialty');
+    correoTextEmergencia.value = box.read('doctor_email');
+    hospitalResidenteTextEmergencia.value = box.read('doctor_institution');
+
+    update(); // Notifica los cambios
+    super.onReady();
+  }
+
   // Observable variables
-  var generoText = 'Masculino'.obs;
-  var tipoDocumentoText = 'CC'.obs;
-  var departamentoText = 'Valle del Cauca'.obs;
-  var municipioOCiudadText = 'Yumbo'.obs;
-  var barrioText = 'Uribe'.obs;
-  var tipoDeCalleText = 'Calle'.obs;
-  var calleText = 'Cl 7'.obs;
-  var numeroText = '#10-62'.obs;
-  var numeroDocumentoText = '1109184453'.obs;
+  var generoText = ''.obs;
+  var tipoDocumentoText = ''.obs;
+  var departamentoText = ''.obs;
+  var municipioOCiudadText = ''.obs;
+  var barrioText = ''.obs;
+  var tipoDeCalleText = ''.obs;
+  var calleText = ''.obs;
+  var numeroText = ''.obs;
+  var numeroDocumentoText = ''.obs;
 
   // Contacto de emergencia
-  var nombreTextEmergencia = 'Lourdes de la Torre Acosta'.obs;
-  var generoTextEmergencia = 'Femenino'.obs;
-  var tipoDocumentoTextEmergencia = 'CC'.obs;
-  var departamentoTextEmergencia = 'Valle del Cauca'.obs;
-  var municipioOCiudadTextEmergencia = 'Yumbo'.obs;
-  var barrioTextEmergencia = 'Uribe'.obs;
-  var tipoDeCalleTextEmergencia = 'Calle'.obs;
-  var calleTextEmergencia = 'Cl 7'.obs;
-  var numeroTextEmergencia = '#10-62'.obs;
-  var numeroDocumentoTextEmergencia = '31482638'.obs;
-  var numeroCelularTextEmergencia = '3172908916'.obs;
-  var parentescoEmergencia = 'Madre'.obs;
+  var nombreTextEmergencia = ''.obs;
+  var generoTextEmergencia = ''.obs;
+  var tipoDocumentoTextEmergencia = ''.obs;
+  var departamentoTextEmergencia = ''.obs;
+  var municipioOCiudadTextEmergencia = ''.obs;
+  var barrioTextEmergencia = ''.obs;
+  var tipoDeCalleTextEmergencia = ''.obs;
+  var calleTextEmergencia = ''.obs;
+  var numeroTextEmergencia = ''.obs;
+  var numeroDocumentoTextEmergencia = ''.obs;
+  var numeroCelularTextEmergencia = ''.obs;
+  var parentescoEmergencia = ''.obs;
 
   // Información de Atención Médica
   var aseguradoraTextEmergencia = 'Sura'.obs;
@@ -38,6 +76,7 @@ class AjustesUserController extends GetxController {
   var especialidadMedicoTextEmergencia = 'Cardiologo'.obs;
   var correoTextEmergencia = 'Alberto.jimenez@gmail.com'.obs;
   var hospitalResidenteTextEmergencia = 'Clinica la Esperanza'.obs;
+  var aseguradoraTextEmergencia1 = 'Sura'.obs;
 
   List<String> generosList = ['Masculino', 'Femenino', 'Ninguno'];
   List<String> tipoVinculacion = ['Cotizante', 'Beneficiario'];
@@ -129,6 +168,7 @@ class AjustesUserController extends GetxController {
     'Amigo',
     'Otro'
   ];
+  List<String> aseguradoraList = ['Sura', 'AsmetSalud'];
 
   void guardarDatos() {
     String locationMessage = 'Datos guardados:\n'
