@@ -1,51 +1,23 @@
-import 'package:get_storage/get_storage.dart';
-import 'package:kibo/app/routes/pages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
-class AjustesUserController extends GetxController {
-  get formKeyAnalitica => GlobalKey<FormState>();
+import '../routes/pages.dart';
 
-  void onReady() {
-    final box = GetStorage();
-    generoText.value = box.read('user_gender');
-    tipoDocumentoText.value = box.read('user_type_doc');
-    departamentoText.value = box.read('user_departament');
-    municipioOCiudadText.value = box.read('user_city');
-    barrioText.value = box.read('user_neighborhood');
-    tipoDeCalleText.value = box.read('user_type_street');
-    calleText.value = box.read('user_street_number');
-    numeroText.value = box.read('user_house_number');
-    numeroDocumentoText.value = box.read('user_doc_number');
+class RegistrarInfoController extends GetxController {
+  get formKeyRegistrarseInfo => null;
 
 
-    nombreTextEmergencia.value = box.read('emergency_name');
-    apellidoTextEmergencia.value = box.read('emergency_last_name');
-    generoTextEmergencia.value = box.read('emergency_gender');
-    tipoDocumentoTextEmergencia.value = box.read('emergency_type_doc');
-    departamentoTextEmergencia.value = box.read('emergency_departament');
-    municipioOCiudadTextEmergencia.value = box.read('emergency_city');
-    barrioTextEmergencia.value = box.read('emergency_neighborhood');
-    tipoDeCalleTextEmergencia.value = box.read('emergency_type_street');
-    calleTextEmergencia.value = box.read('emergency_street_number');
-    numeroTextEmergencia.value = box.read('emergency_house_number');
-    numeroDocumentoTextEmergencia.value = box.read('emergency_doc_number');
-    numeroCelularTextEmergencia.value = box.read('emergency_cel_mobile');
-    parentescoEmergencia.value = box.read('emergency_relationship');
-
-    aseguradoraTextEmergencia.value = box.read('medical_insurance');
-    tipoVinculacionTextEmergencia.value = box.read('medical_type_link');
-    nombreMedicoTextEmergencia.value = box.read('doctor_full_name');
-    especialidadMedicoTextEmergencia.value = box.read('doctor_specialty');
-    correoTextEmergencia.value = box.read('doctor_email');
-    hospitalResidenteTextEmergencia.value = box.read('doctor_institution');
-
-    update(); // Notifica los cambios
-    super.onReady();
+  void backLoginRegister() {
+    clear();
+    Get.toNamed(Routes.LOGINREGISTER);
   }
 
   // Observable variables
+  var nombreText = ''.obs;
+  var apellidoText = ''.obs;
+
   var generoText = ''.obs;
   var tipoDocumentoText = ''.obs;
   var departamentoText = ''.obs;
@@ -72,13 +44,13 @@ class AjustesUserController extends GetxController {
   var parentescoEmergencia = ''.obs;
 
   // Información de Atención Médica
-  var aseguradoraTextEmergencia = 'Sura'.obs;
-  var tipoVinculacionTextEmergencia = 'Cotizante'.obs;
-  var nombreMedicoTextEmergencia = 'Alberto Jimenez'.obs;
-  var especialidadMedicoTextEmergencia = 'Cardiologo'.obs;
-  var correoTextEmergencia = 'Alberto.jimenez@gmail.com'.obs;
-  var hospitalResidenteTextEmergencia = 'Clinica la Esperanza'.obs;
-  var aseguradoraTextEmergencia1 = 'Sura'.obs;
+  var aseguradoraTextEmergencia = ''.obs;
+  var tipoVinculacionTextEmergencia = ''.obs;
+  var nombreMedicoTextEmergencia = ''.obs;
+  var especialidadMedicoTextEmergencia = ''.obs;
+  var correoTextEmergencia = ''.obs;
+  var hospitalResidenteTextEmergencia = ''.obs;
+
 
   List<String> generosList = ['Masculino', 'Femenino', 'Ninguno'];
   List<String> tipoVinculacion = ['Cotizante', 'Beneficiario'];
@@ -185,5 +157,40 @@ class AjustesUserController extends GetxController {
     // Imprimir el mensaje en la consola
     EasyLoading.showInfo(locationMessage,
         duration: const Duration(milliseconds: 6000));
+  }
+
+  void clear() {
+    // Datos principales
+    generoText.value = '';
+    tipoDocumentoText.value = '';
+    departamentoText.value = '';
+    municipioOCiudadText.value = '';
+    barrioText.value = '';
+    tipoDeCalleText.value = '';
+    calleText.value = '';
+    numeroText.value = '';
+    numeroDocumentoText.value = '';
+
+    // Contacto de emergencia
+    nombreTextEmergencia.value = '';
+    generoTextEmergencia.value = '';
+    tipoDocumentoTextEmergencia.value = '';
+    departamentoTextEmergencia.value = '';
+    municipioOCiudadTextEmergencia.value = '';
+    barrioTextEmergencia.value = '';
+    tipoDeCalleTextEmergencia.value = '';
+    calleTextEmergencia.value = '';
+    numeroTextEmergencia.value = '';
+    numeroDocumentoTextEmergencia.value = '';
+    numeroCelularTextEmergencia.value = '';
+    parentescoEmergencia.value = '';
+
+    // Información de Atención Médica
+    aseguradoraTextEmergencia.value = '';
+    tipoVinculacionTextEmergencia.value = '';
+    nombreMedicoTextEmergencia.value = '';
+    especialidadMedicoTextEmergencia.value = '';
+    correoTextEmergencia.value = '';
+    hospitalResidenteTextEmergencia.value = '';
   }
 }

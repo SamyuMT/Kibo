@@ -1,114 +1,297 @@
-import 'package:kibo/app/controllers/ajustes_user_controller.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:kibo/app/ui/utils/style_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AjusteUserPage extends GetView<AjustesUserController> {
-  const AjusteUserPage({super.key});
+import '../../../controllers/registrar_info_controller.dart';
+
+class RegistarInfoPages extends GetView<RegistrarInfoController> {
+  const RegistarInfoPages({super.key}); // Clave global del formulario
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        backgroundColor: AppColors.blanco,
-        resizeToAvoidBottomInset: true, // Permitir que el cuerpo se ajuste
-        body: SafeArea(
-          child: GetBuilder<AjustesUserController>(
-              init: AjustesUserController(),
-              builder: (AjustesUserController) {
-                return Form(
-                  key: AjustesUserController.formKeyAnalitica,
-                  child: Contenedor(controller: AjustesUserController),
-                );
-              }),
-        ),
-      );
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.azul,
+      resizeToAvoidBottomInset: true, // Permitir que el cuerpo se ajuste
+      body: SafeArea(
+        child: GetBuilder<RegistrarInfoController>(
+            init: RegistrarInfoController(),
+            builder: (controller) {
+              return Form(
+                key: controller.formKeyRegistrarseInfo,
+                child: Contendor(controller: controller),
+              );
+            }),
+      ),
+    );
+  }
 }
 
-class Contenedor extends StatelessWidget {
-  final AjustesUserController controller;
+class Contendor extends StatelessWidget {
+  final RegistrarInfoController controller; // Controlador recibido
 
-  const Contenedor({super.key, required this.controller});
+  const Contendor({
+    super.key,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
         constraints: const BoxConstraints.expand(),
-        child: Column(
-          children: [
-            Expanded(
-              // El widget Central se expande
-              child: Central(controller: controller),
-            ),
-          ],
+        decoration: const BoxDecoration(gradient: AppColors.principal),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [Arriba(controller: controller),
+          const SizedBox(
+            height: 16),
+            Overlay(controller: controller)],
+          ),
         ),
       ),
     );
   }
 }
 
-class Central extends StatefulWidget {
-  final AjustesUserController controller;
 
-  const Central({super.key, required this.controller});
+class Arriba extends StatelessWidget {
+  final RegistrarInfoController controller; // Controlador recibido
 
-  @override
-  _CentralState createState() => _CentralState();
-}
-
-class _CentralState extends State<Central> {
-  @override
-  void initState() {
-    super.initState();
-  }
+  const Arriba({
+    super.key,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // No es necesario llamar a updateHeartRateHistory aquí, se llama automáticamente en el timer
     return Container(
-      clipBehavior: Clip.antiAlias,
-      decoration: const BoxDecoration(
-        border: Border(
-          top: BorderSide(color: AppColors.negro, width: 2.0),
-          // Solo borde superior
-          // Los demás bordes se pueden dejar sin definir
-          left: BorderSide.none,
-          right: BorderSide.none,
-          bottom: BorderSide(color: AppColors.negro, width: 2.0),
-        ),
+      constraints: const BoxConstraints.expand(height: 240),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Superior(controller: controller),
+          const SizedBox(
+            height: 16,
+          ),
+          const SizedBox(
+            height: 128,
+            child: TextoCentral(),
+          ),
+        ],
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Test(
-              controller: widget.controller,
-            )
-          ],
+    );
+  }
+}
+
+class Superior extends StatelessWidget {
+  final RegistrarInfoController controller; // Controlador recibido
+
+  const Superior({
+    super.key,
+    required this.controller,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        constraints: const BoxConstraints.expand(height: 96),
+        padding: const EdgeInsets.only(top: 48, left: 24, right: 24),
+        child: ArrowForward(controller: controller));
+  }
+}
+
+class ArrowForward extends StatelessWidget {
+  final RegistrarInfoController controller; // Controlador recibido
+
+  const ArrowForward({
+    super.key,
+    required this.controller,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        IconButton(
+          onPressed: () {
+            controller.backLoginRegister();
+          },
+          // Llama a la acción cuando se presiona el botón
+          icon: SvgPicture.asset(
+            'assets/images/arrow_forward.svg', // Ruta de tu SVG
+            width: 48,
+            height: 48,
+            color: AppColors.blanco, // Puedes cambiar el color si es necesario
+          ),
+          iconSize: 48,
+          // Tamaño del ícono
+          padding: EdgeInsets.zero,
+          // Elimina el padding extra
+          constraints:
+          const BoxConstraints(), // Ajusta para que no tenga límites adicionales
+        ),
+      ],
+    );
+  }
+}
+
+class TextoCentral extends StatelessWidget {
+  const TextoCentral({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Bienvenido(),
+          SizedBox(width: 8), // Ahora el espacio es horizontal
+          Cardiology(),
+        ],
+      ),
+    );
+  }
+}
+
+class Bienvenido extends StatelessWidget {
+  const Bienvenido({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 290, // Ancho máximo
+        height: 96,
+        child: const Text(
+          'Ya casi terminamos',
+          textAlign: TextAlign.left,
+          style: TextStyle(
+            color: AppColors.blanco,
+            fontSize: 46,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w300,
+            height: 1.0, // Espaciado entre líneas
+          ),
+          maxLines: 2, // Establece el número máximo de líneas
+          overflow: TextOverflow.ellipsis, // Agrega elipsis si se desborda
         ),
       ),
     );
   }
 }
 
+class Cardiology extends StatelessWidget {
+  const Cardiology({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 56,
+      height: 56,
+      padding: const EdgeInsets.symmetric(horizontal: 4.67, vertical: 7),
+      child: SvgPicture.asset(
+        'assets/images/corazon_icon.svg', // Ruta del archivo SVG
+        width: 56,
+        height: 56,
+        fit: BoxFit.contain, // Ajusta cómo se muestra el SVG
+      ),
+    );
+  }
+}
+
+class Overlay extends StatelessWidget {
+  final RegistrarInfoController controller;
+
+  const Overlay({
+    final key,
+    required this.controller,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      Container(
+        constraints: const BoxConstraints.expand(height: 506),
+        padding: const EdgeInsets.only(top: 8),
+        clipBehavior: Clip.antiAlias,
+        decoration: const ShapeDecoration(
+          color: AppColors.blanco,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(48),
+                bottomLeft: Radius.circular(48),
+                bottomRight: Radius.circular(48)),
+          ),
+          shadows: [
+            BoxShadow(
+              color: Color(0x47000000),
+              blurRadius: 10.40,
+              offset: Offset(0, 0),
+              spreadRadius: 8,
+            )
+          ],
+        ),
+          child: Column(
+            children: [
+              const Text(
+                'Llena el siguiente formulario.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 22,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 8,),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Container(
+                    child: Test(controller: controller),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+    ]);
+  }
+}
+
+
 class Test extends StatelessWidget {
-  final AjustesUserController controller;
+  final RegistrarInfoController controller;
 
   const Test({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        Container(
-          child: SingleChildScrollView(
-            child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Titulo(
                   text: 'Información Personal',
+                ),
+                CustoTextField(
+                  labelText: 'Nombres',
+                  controller: controller.nombreText,
+                ),
+                CustoTextField(
+                  labelText: 'Apellidos',
+                  controller: controller.apellidoText,
                 ),
                 CustoTextField(
                   labelText: 'Genero',
@@ -260,10 +443,6 @@ class Test extends StatelessWidget {
                   controller: controller,
                 ),
               ],
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
@@ -411,7 +590,7 @@ class CustoTextField extends StatelessWidget {
 }
 
 class BotonGuardar extends StatelessWidget {
-  final AjustesUserController controller;
+  final RegistrarInfoController controller;
 
   const BotonGuardar({
     super.key,
@@ -436,12 +615,12 @@ class BotonGuardar extends StatelessWidget {
             ),
           ),
           backgroundColor:
-              WidgetStateProperty.all(AppColors.principal.colors.first),
+          WidgetStateProperty.all(AppColors.principal.colors.first),
           shadowColor: WidgetStateProperty.all(const Color(0xCCCBD6FF)),
           elevation: WidgetStateProperty.all(10),
         ),
         child: const Text(
-          'Guardar',
+          'Crear Usuario',
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,

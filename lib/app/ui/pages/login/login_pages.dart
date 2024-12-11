@@ -647,7 +647,7 @@ class Incribirse extends StatelessWidget {
               'Inscribirse',
               textAlign: TextAlign.right,
               style: TextStyle(
-                color: AppColors.grisdesactivado,
+                color: AppColors.negro,
                 fontSize: 14,
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600,
