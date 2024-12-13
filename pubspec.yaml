@@ -35,6 +35,8 @@ dependencies:
   app_settings: ^5.1.1
   android_intent_plus: ^5.2.0
   http: ^0.13.6
+  csv: ^5.0.2
+  intl: ^0.18.0  # Asegúrate de que sea la última versión
 
 dev_dependencies:
   flutter_test:
@@ -50,6 +52,7 @@ flutter:
   assets:
     - assets/images/
     - assets/sounds/
+    - assets/vector/
   fonts:
     - family: Poppins
       fonts:

@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:kibo/app/controllers/analitica_controller.dart';
 import 'package:kibo/app/ui/utils/style_utils.dart';
 import 'package:flutter/material.dart';
@@ -62,10 +63,7 @@ class _CentralState extends State<Central> {
   void initState() {
     super.initState();
     // Inicia la simulación al crear el widget
-    widget.controller.startHeartRateSimulation();
-    widget.controller.startTendenciaSimulation();
-    widget.controller.startRiskSimulation();
-  }
+    widget.controller.startHeartRateSimulation();}
 
   @override
   Widget build(BuildContext context) {
@@ -128,8 +126,14 @@ class Graph extends StatelessWidget {
 
   const Graph({super.key, required this.controller});
 
+
+
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+    // Formatear la fecha (puedes cambiar el formato según necesites)
+    String formattedDate = DateFormat('MMM d, yyyy').format(now);
+
     return Container(
       constraints: const BoxConstraints.expand(height: 240),
       child: Column(
@@ -139,12 +143,12 @@ class Graph extends StatelessWidget {
         children: [
           Container(
             constraints: const BoxConstraints.expand(height: 40),
-            child: const Column(
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
+                const SizedBox(
                   width: double.infinity,
                   child: Text(
                     'Tendencia de ritmo cardiaco',
@@ -161,9 +165,9 @@ class Graph extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: Text(
-                    'Oct 3 del 2024',
+                    formattedDate,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Color(0xFF2E2E30),
                       fontSize: 10,
                       fontFamily: 'Poppins',

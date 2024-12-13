@@ -52,6 +52,7 @@ class LoginController extends GetxController {
       isUserAlert.value = false;
       isPasswordAlert.value = false;
       User user = await getUser(credential.data.id);
+      print('user');
       String fullNameUser = "${user.data.name} ${user.data.last_name}";
       box.write('user_name', user.data.name);
       box.write('user_name_last', user.data.last_name);
@@ -62,6 +63,7 @@ class LoginController extends GetxController {
 
 
       InfoUser infoUser = await getUserInfo(credential.data.id);
+      print('Info user');
       box.write('user_city', infoUser.data.city);
       box.write('user_departament', infoUser.data.department);
       box.write('user_doc_number', infoUser.data.doc_number);
@@ -74,6 +76,7 @@ class LoginController extends GetxController {
 
 
       EmergencyUser emergencyUser = await getUserEmergency(credential.data.id);
+      print('Emergencia Info');
       String fullNameEmergency = "${emergencyUser.data.name} ${emergencyUser.data.last_name}";
       box.write('emergency_cel_mobile', emergencyUser.data.cel_mobile);
       box.write('emergency_city', emergencyUser.data.city);
@@ -92,11 +95,13 @@ class LoginController extends GetxController {
 
 
       MedicalUser medicalUser = await getMedical(credential.data.id);
+      print('Info Medico');
       box.write('medical_insurance', medicalUser.data.insurance);
       box.write('medical_type_link', medicalUser.data.type_link);
 
 
       DoctorUser doctorUser = await getDoctorUser(medicalUser.data.id_doctor);
+      print('Doctor');
       String fullNameDoctor = "${doctorUser.data.name} ${doctorUser.data.last_name}";
       box.write('doctor_institution', doctorUser.data.institution);
       box.write('doctor_last_name', doctorUser.data.last_name);
@@ -143,36 +148,26 @@ class LoginController extends GetxController {
 
   Future<User> getUser(String id) async{
     User user = await navbarRepository.getUser(id: id);
-    String name = user.data.name;
-    print("nombre $name");
     return user;
   }
 
   Future<InfoUser> getUserInfo(String id) async{
     InfoUser infoUser = await navbarRepository.getUserInfo(id: id);
-    String neighborhood = infoUser.data.neighborhood;
-    print("Barrio $neighborhood");
     return infoUser;
   }
 
   Future<EmergencyUser> getUserEmergency(String id) async{
     EmergencyUser emergencyUser = await navbarRepository.getUserEmergency(id: id);
-    String name = emergencyUser.data.name;
-    print("nombre de contacto emergencia $name");
     return emergencyUser;
   }
 
   Future<MedicalUser> getMedical(String id) async{
     MedicalUser medicalUser = await navbarRepository.getMedical(id: id);
-    String id_doctor = medicalUser.data.id_doctor;
-    print("id_doctor $id_doctor");
     return medicalUser;
   }
 
   Future<DoctorUser> getDoctorUser(String id) async{
     DoctorUser doctorUser = await navbarRepository.getDoctorUser(id: id);
-    String institucion = doctorUser.data.institution;
-    print("La institucion $institucion");
     return doctorUser;
   }
 

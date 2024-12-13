@@ -294,10 +294,19 @@ class Test extends StatelessWidget {
                   controller: controller.apellidoText,
                 ),
                 CustoTextField(
+                  labelText: 'Nick Name',
+                  controller: controller.nickName,
+                ),
+
+                CustoTextField(
                   labelText: 'Genero',
                   controller: controller.generoText,
                   isDropdown: true, // Esto mostrará un DropdownButtonFormField
                   dropdownItems: controller.generosList,
+                ),
+                CustoTextField(
+                  labelText: 'Rol de trabajo',
+                  controller: controller.rol,
                 ),
                 CustoTextField(
                   labelText: 'Tipo de documento',
@@ -424,8 +433,12 @@ class Test extends StatelessWidget {
                   dropdownItems: controller.tipoVinculacion,
                 ),
                 CustoTextField(
-                  labelText: 'Nombre del Médico Tratante',
+                  labelText: 'Nombres del Médico Tratante',
                   controller: controller.nombreMedicoTextEmergencia,
+                ),
+                CustoTextField(
+                  labelText: 'Apellidos del Médico Tratante',
+                  controller: controller.apellidoMedicoTextEmergencia,
                 ),
                 CustoTextField(
                   labelText: 'Especialidad del Médico Tratante',

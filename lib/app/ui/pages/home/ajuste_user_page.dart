@@ -241,8 +241,12 @@ class Test extends StatelessWidget {
                   dropdownItems: controller.tipoVinculacion,
                 ),
                 CustoTextField(
-                  labelText: 'Nombre del Médico Tratante',
+                  labelText: 'Nombres del Médico Tratante',
                   controller: controller.nombreMedicoTextEmergencia,
+                ),
+                CustoTextField(
+                  labelText: 'Apellidos del Médico Tratante',
+                  controller: controller.apellidoMedicoTextEmergencia,
                 ),
                 CustoTextField(
                   labelText: 'Especialidad del Médico Tratante',
@@ -256,9 +260,9 @@ class Test extends StatelessWidget {
                   labelText: 'Institución del residente',
                   controller: controller.hospitalResidenteTextEmergencia,
                 ),
-                BotonGuardar(
-                  controller: controller,
-                ),
+                //BotonGuardar(
+                 // controller: controller,
+                //),
               ],
             ),
           ),

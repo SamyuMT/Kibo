@@ -9,6 +9,7 @@ part of 'doctor_user_data.dart';
 DoctorUserData _$DoctorUserDataFromJson(Map<String, dynamic> json) =>
     DoctorUserData(
       email: json['email'] as String,
+      id: json['id'] as String,
       institution: json['institution'] as String,
       last_name: json['last_name'] as String,
       name: json['name'] as String,
@@ -19,6 +20,7 @@ DoctorUserData _$DoctorUserDataFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$DoctorUserDataToJson(DoctorUserData instance) =>
     <String, dynamic>{
       'email': instance.email,
+      'id': instance.id,
       'institution': instance.institution,
       'last_name': instance.last_name,
       'name': instance.name,

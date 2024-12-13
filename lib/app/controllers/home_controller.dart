@@ -221,5 +221,6 @@ class HomeController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    Controller.loadHeartRateData();
   }
 }
