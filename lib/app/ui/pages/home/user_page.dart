@@ -244,9 +244,9 @@ class Perfilsuperior extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Editar(
-                controller: controller,
-              ),
+              //Editar(
+                //controller: controller,
+              //),
               const SizedBox(height: 16),
               EditarText(
                 controller: controller,

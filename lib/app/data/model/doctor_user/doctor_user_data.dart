@@ -4,13 +4,14 @@ part 'doctor_user_data.g.dart';
 @JsonSerializable(explicitToJson: true)
 class DoctorUserData {
   String email;
+  String id;
   String institution;
   String last_name;
   String name;
   String specialty;
   bool state;
 
-  DoctorUserData({required this.email, required this.institution, required this.last_name,required this.name,
+  DoctorUserData({required this.email, required this.id, required this.institution, required this.last_name,required this.name,
     required this.specialty, required this.state});
 
   factory DoctorUserData.fromJson(Map<String, dynamic> data) => _$DoctorUserDataFromJson(data);

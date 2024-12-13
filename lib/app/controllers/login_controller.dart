@@ -74,6 +74,7 @@ class LoginController extends GetxController {
 
 
       EmergencyUser emergencyUser = await getUserEmergency(credential.data.id);
+      print(emergencyUser.data.gender);
       String fullNameEmergency = "${emergencyUser.data.name} ${emergencyUser.data.last_name}";
       box.write('emergency_cel_mobile', emergencyUser.data.cel_mobile);
       box.write('emergency_city', emergencyUser.data.city);

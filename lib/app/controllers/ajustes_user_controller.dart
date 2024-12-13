@@ -36,7 +36,9 @@ class AjustesUserController extends GetxController {
 
     aseguradoraTextEmergencia.value = box.read('medical_insurance');
     tipoVinculacionTextEmergencia.value = box.read('medical_type_link');
-    nombreMedicoTextEmergencia.value = box.read('doctor_full_name');
+    nombreMedicoTextEmergencia.value = box.read('doctor_name');
+    apellidoMedicoTextEmergencia.value = box.read('doctor_last_name');
+
     especialidadMedicoTextEmergencia.value = box.read('doctor_specialty');
     correoTextEmergencia.value = box.read('doctor_email');
     hospitalResidenteTextEmergencia.value = box.read('doctor_institution');
@@ -75,6 +77,8 @@ class AjustesUserController extends GetxController {
   var aseguradoraTextEmergencia = 'Sura'.obs;
   var tipoVinculacionTextEmergencia = 'Cotizante'.obs;
   var nombreMedicoTextEmergencia = 'Alberto Jimenez'.obs;
+  var apellidoMedicoTextEmergencia = ''.obs;
+
   var especialidadMedicoTextEmergencia = 'Cardiologo'.obs;
   var correoTextEmergencia = 'Alberto.jimenez@gmail.com'.obs;
   var hospitalResidenteTextEmergencia = 'Clinica la Esperanza'.obs;

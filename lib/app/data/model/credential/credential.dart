@@ -18,4 +18,19 @@ class Credential {
       _$CredentialFromJson(data);
 
   Map<String, dynamic> toJson() => _$CredentialToJson(this);
+
+  // Create a new CredentialData object from the provided string
+  void updateCredentialData(CredentialData dt) {
+    data = dt; // Use the constructor of CredentialData
+  }
+
+  void updateMessage(String dt) {
+    message = dt; // Use the constructor of CredentialData
+  }
+
+  void updateStatus(bool dt) {
+    status = dt; // Use the constructor of CredentialData
+  }
+
+
 }

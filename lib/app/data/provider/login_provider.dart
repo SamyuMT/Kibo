@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get_connect/connect.dart';
+import 'package:kibo/app/data/model/credential/credential.dart';
 
 const baseUrl = 'http://10.0.2.2:5000';
 

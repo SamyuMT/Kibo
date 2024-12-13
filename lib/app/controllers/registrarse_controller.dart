@@ -1,12 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:kibo/app/data/provider/register_provider.dart';
 import '../data/model/credential/credential.dart';
-import 'package:kibo/app/data/repository/login_repository.dart';
 
-
+import '../data/model/credential/credential_data.dart';
 import '../routes/pages.dart';
 
 
@@ -80,7 +81,7 @@ class RegistrarseController extends GetxController {
 
 
   Future<void> validateCredentials() async {
-    final boxRegister = GetStorage();
+    final box = GetStorage();
     if(passwordController.text == passwordConfirmController.text){
       isPasswordAlert.value = false;
       bool emailVerificado = await verificarEmail(EmailController.text);
@@ -105,9 +106,11 @@ class RegistrarseController extends GetxController {
       else{
         isUserEmail.value = false;
         isNumberAlert.value = false;
-        boxRegister.write('user_email',  EmailController.text);
-        boxRegister.write('user_number', NumberController.text);
-        boxRegister.write('user_pass', passwordConfirmController.text);
+        box.write('user_email',  EmailController.text);
+        box.write('user_number', NumberController.text);
+        box.write('user_pass', passwordConfirmController.text);
+
+
         EasyLoading.showInfo('Datos Correctos'.toString()); // Muestra el mensaje de error
         clearLoginData();
         Get.toNamed(Routes.REGISTRARSEINFO);
