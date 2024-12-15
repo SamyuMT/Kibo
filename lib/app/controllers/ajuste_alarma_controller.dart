@@ -4,10 +4,13 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class AjusteAlarmaController extends GetxController {
+  final box = GetStorage();
+
   final FlutterLocalNotificationsPlugin notificacion =
       FlutterLocalNotificationsPlugin();
 
@@ -31,7 +34,7 @@ class AjusteAlarmaController extends GetxController {
     // Reproduce el sonido de la alarma (reemplaza 'assets/alarm_sound.mp3' por tu archivo de sonido)
     await _audioPlayer.play(AssetSource('sounds/cardiaco.mp3'));
     // Detener el sonido después de 2500 milisegundos
-    Timer(const Duration(milliseconds: 6000), () {
+    Timer(const Duration(milliseconds: 12000), () {
       _audioPlayer.stop();
     });
   }
@@ -145,22 +148,28 @@ class AjusteAlarmaController extends GetxController {
   }
 
   void toggleBottomPrueba() {
+    String fullName = box.read('user_full_name');
+    String Nombre_emergencia = box.read('emergency_full_name');
+    String telefono_emergencia = box.read('emergency_cel_mobile');
+    String cedula = box.read('user_doc_number');
+
+    // Datos de contacto de emergencia
+    String emergencyContact = 'Contacto de emergencia:\n'
+        'Nombre: $Nombre_emergencia\n'
+        'Teléfono: $telefono_emergencia\n';
+
+    // Información de emergencia
+    String dataUser = 'Mi nombre es $fullName\n, '
+        'y mi número de documento es $cedula.\n'
+        'Texto de emergencia: ${TextController.text}\n';
+
+    String dateTimeNow = '$dataUser-$emergencyContact';
+
     if (currentPosition.value != null) {
-      String locationMessage =
-          '${TextController.text} Estoy ubicado en: Latitud ${currentPosition.value!.latitude}, Longitud ${currentPosition.value!.longitude}, ¡Necesito Ayuda URGENTE!\n'
-          'Tienes las etiquetas:\n'
-          'V: ${isV.value}\n'
-          '!: ${isAle.value}\n'
-          'F: ${isF.value}\n'
-          'f: ${isf.value}\n';
-      // Imprimir el mensaje en la consola
-      print(locationMessage);
-
       // Mostrar notificación
-      showNotification('Alerta de Ubicación', locationMessage);
-      EasyLoading.showInfo(locationMessage,
-          duration: const Duration(milliseconds: 6000));
-
+      showNotification('Alerta de emergencia', dateTimeNow);
+      EasyLoading.showInfo(dateTimeNow,
+          duration: const Duration(milliseconds: 12000));
       // Reproducir sonido de alarma
       _playAlarmSound();
     } else {

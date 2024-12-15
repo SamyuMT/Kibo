@@ -15,7 +15,6 @@ class NavbarController extends GetxController {
 
   @override
   onReady() async {
-    Get.put(AjusteAlarmaController());
     Get.put(AjustesUserController());
     Get.put(UserController());
     super.onReady();

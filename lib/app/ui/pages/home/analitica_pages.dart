@@ -133,7 +133,6 @@ class Graph extends StatelessWidget {
     DateTime now = DateTime.now();
     // Formatear la fecha (puedes cambiar el formato según necesites)
     String formattedDate = DateFormat('MMM d, yyyy').format(now);
-
     return Container(
       constraints: const BoxConstraints.expand(height: 240),
       child: Column(

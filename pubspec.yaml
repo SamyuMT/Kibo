@@ -26,7 +26,7 @@ dependencies:
   google_maps_flutter: ^2.2.0 # Verifica la versión más reciente
   geolocator: ^13.0.1
   permission_handler: ^11.3.1
-  audioplayers: ^6.1.0
+  audioplayers: ^5.2.0
   image_picker: ^1.1.2
   cupertino_icons: ^1.0.8
   flutter_local_notifications: ^17.2.3

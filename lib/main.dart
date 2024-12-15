@@ -12,6 +12,7 @@ import 'app/controllers/home_controller.dart';
 import 'app/ui/themes/light_theme.dart';
 
 void main() async {
+  Get.put(AjusteAlarmaController());
   Get.put(AnaliticaController());
   Get.put(HomeController());
   runApp(GetMaterialApp(
