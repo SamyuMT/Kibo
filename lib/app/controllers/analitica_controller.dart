@@ -73,7 +73,7 @@ class AnaliticaController extends GetxController {
   RxString dataBt = ''.obs; // Observable para datos recibidos
   final box = GetStorage();
 
-  var baseUrl = 'http://10.0.2.2:5000';
+  var baseUrl = 'http://10.0.2.2:500099';
   var headers = {'content-type': 'application/json'};
 
 
