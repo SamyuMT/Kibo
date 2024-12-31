@@ -377,7 +377,7 @@ class RegistrarInfoController extends GetxController {
     // Imprimir el mensaje en la consola
     EasyLoading.showInfo(locationMessage,
         duration: const Duration(milliseconds: 6000));
-    Get.toNamed(Routes.NAVBAR);
+    Get.toNamed(Routes.LOGIN);
     clear();
 
 

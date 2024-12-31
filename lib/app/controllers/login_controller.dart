@@ -142,7 +142,9 @@ class LoginController extends GetxController {
     Get.toNamed(Routes.LOGINREGISTER);
   }
   Future<Credential> getDataUser() async{
-    Credential body = await loginRepository.getDataCredential(credential: UserController.text, pass: passwordController.text);
+    String crede = UserController.text;
+    String pass = passwordController.text;
+    Credential body = await loginRepository.getDataCredential(credential: crede, pass: pass);
     return body;
   }
 

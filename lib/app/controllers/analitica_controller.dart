@@ -17,7 +17,8 @@ import 'package:http/http.dart' as http;
 class AnaliticaController extends GetxController {
   final ControllerAlarma = Get.find<AjusteAlarmaController>();
 
-  List<double> signalECGVector = []; // Vector con los datos cargados del archivo
+  List<double> signalECGVectorRiesgo = []; // Vector con los datos cargados del archivo
+  List<double> signalECGVectorNormal = []; // Vector con los datos cargados del archivo
 
   int currentIndexVector = 0; // Índice para recorrer el vector
   int contadorV = 0;
@@ -52,7 +53,7 @@ class AnaliticaController extends GetxController {
   int windowSizeBpm = 625; // 5 segundo (125 datos)
   int overlapSizeBpm = 125; // 90% (traslape)
   int ventanaGuardar = 0;
-
+  int sizeVectorPrueba = 0;
 
   final List<String> tendenciasLinea1 = [
     "Mantén una hidratación adecuada.",
@@ -73,21 +74,27 @@ class AnaliticaController extends GetxController {
   RxString dataBt = ''.obs; // Observable para datos recibidos
   final box = GetStorage();
 
-  var baseUrl = 'http://10.0.2.2:500099';
+  var baseUrl = 'http://10.0.2.2:5000';
   var headers = {'content-type': 'application/json'};
 
 
   Future<void> loadHeartRateData() async {
     print("Cargando datos del archivo CSV...");
     try {
-      final String rawData = await rootBundle.loadString('assets/vector/full_tiempo_2760.00.csv');
-      List<List<dynamic>> csvTable = const CsvToListConverter().convert(rawData);
+      final String rawDataRiesgo = await rootBundle.loadString('assets/vector/full_tiempo_2760.00.csv');
+      List<List<dynamic>> csvTableRiesgo = const CsvToListConverter().convert(rawDataRiesgo);
+
+      final String rawDataNormal = await rootBundle.loadString('assets/vector/vector.csv');
+      List<List<dynamic>> csvTableNormal = const CsvToListConverter().convert(rawDataNormal);
 
       // Asumiendo que el CSV es una sola fila de floats
-      signalECGVector = csvTable[0].map((value) => double.parse(value.toString())).toList();
+      signalECGVectorRiesgo = csvTableRiesgo[0].map((value) => double.parse(value.toString())).toList();
+      signalECGVectorNormal = csvTableNormal[0].map((value) => double.parse(value.toString())).toList();
 
-      if (signalECGVector.isNotEmpty) {
-        print("Datos cargados correctamente. Total de muestras: ${signalECGVector.length}");
+      if (signalECGVectorRiesgo.isNotEmpty && signalECGVectorNormal.isNotEmpty) {
+        print("Datos cargados correctamente. Total de muestras para vector con riesgo: ${signalECGVectorRiesgo.length}");
+        print("Datos cargados correctamente. Total de muestras para el vector normal: ${signalECGVectorNormal.length}");
+
       } else {
         print("Error: El archivo CSV está vacío.");
       }
@@ -187,65 +194,69 @@ class AnaliticaController extends GetxController {
     final random = Random();
     Timer.periodic(const Duration(milliseconds: 8), (timer) {
       // Generar un valor aleatorio entre 20 y 150
-      //heartRate.value = int.tryParse(dataBt.value) ?? heartRate.value; // Usar el valor de dataBt
       // Si llegamos al final del vector, detenemos el timer
-      if (currentIndex == signalECGVector.length) {
+      sizeVectorPrueba = ControllerAlarma.isRiesgo.value
+          ? signalECGVectorRiesgo.length
+          : signalECGVectorNormal.length;
+
+      if (currentIndex == sizeVectorPrueba) {
         currentIndexVector = 0;
         seconds = 0;
       }
-      
-      signalECG = signalECGVector[currentIndexVector];
-      signalBPM = signalECGVector[currentIndexVector];
+
+      signalECG = double.tryParse(dataBt.value) ?? (ControllerAlarma.isRiesgo.value
+          ? signalECGVectorRiesgo[currentIndexVector]
+          : signalECGVectorNormal[currentIndexVector]);
+      signalBPM =  double.tryParse(dataBt.value) ?? (ControllerAlarma.isRiesgo.value
+          ? signalECGVectorRiesgo[currentIndexVector]
+          : signalECGVectorNormal[currentIndexVector]);
       currentIndexVector++;
-      ventanaGuardar++;
-     
-      // Agrega el dato a la cola
-      ecgQueue.add(signalECG);
-      bpmQueue.add(signalBPM);
-      
-      // Si la cola excede la ventana (sin traslape), elimina el más antiguo
-      if (ecgQueue.length > windowSizeEcg) {
-        for (int i = 0; i < (overlapSizeEcg); i++) {
-          ecgQueue.removeFirst();
+
+      if(dataBt.value != "" || ControllerAlarma.isSimulador.value){
+        ventanaGuardar++;
+        // Agrega el dato a la cola
+        ecgQueue.add(signalECG);
+        bpmQueue.add(signalBPM);
+        // Agregar datos a las listas
+        ecgLista.add(signalECG);
+
+        // Si la cola excede la ventana (sin traslape), elimina el más antiguo
+        if (ecgQueue.length > windowSizeEcg) {
+          for (int i = 0; i < (overlapSizeEcg); i++) {
+            ecgQueue.removeFirst();
+          }
         }
-      }
 
-      if (bpmQueue.length > windowSizeBpm) {
-        for (int i = 0; i < (overlapSizeBpm); i++) {
-          bpmQueue.removeFirst();
+        if (bpmQueue.length > windowSizeBpm) {
+          for (int i = 0; i < (overlapSizeBpm); i++) {
+            bpmQueue.removeFirst();
+          }
         }
+
+        // Imprime los segundos cada 125 iteraciones (~1 segundo si el dato llega cada 8ms)
+        if (timer.tick % 125 == 0) {
+          seconds++;
+          updateHeartRateHistory1(); // Actualiza el historial de frecuencia cardíaca para graficarlo
+          print("Segundos transcurridos: $seconds");
+        }
+
+        // Imprime los segundos cada 125 iteraciones (~1 segundo si el dato llega cada 8ms)
+        if (ventanaGuardar == 37500) {
+          ventanaGuardar = 0;
+          updateHeartRateHistory1();
+          // Guardar o imprimir las listas
+          print("Resultados de los últimos 5 minutos:");
+          _guardarDatos();
+          // Vaciar las listas
+          predLista.clear();
+          ecgLista.clear();
+          bpmLista.clear();
+          print("Las listas han sido vaciadas. Preparadas para los siguientes 5 minutos.");
+        }
+
+        _processAndSendEcg();
+        _processAndSendBmp();
       }
-
-      // Agregar datos a las listas
-      ecgLista.add(signalECGVector[currentIndexVector]);
-      
-      // Imprime los segundos cada 125 iteraciones (~1 segundo si el dato llega cada 8ms)
-      if (timer.tick % 125 == 0) {
-        seconds++;
-        updateHeartRateHistory1(); // Actualiza el historial de frecuencia cardíaca para graficarlo
-        print("Segundos transcurridos: $seconds");
-      }
-
-      // Imprime los segundos cada 125 iteraciones (~1 segundo si el dato llega cada 8ms)
-      if (ventanaGuardar == 37500) {
-        ventanaGuardar = 0;
-        updateHeartRateHistory1();
-
-        // Guardar o imprimir las listas
-        print("Resultados de los últimos 5 minutos:");
-        _guardarDatos();
-        // Vaciar las listas
-        predLista.clear();
-        ecgLista.clear();
-        bpmLista.clear();
-
-        print("Las listas han sido vaciadas. Preparadas para los siguientes 3 minutos.");
-      }
-
-
-      _processAndSendEcg();
-      _processAndSendBmp();
-
     });
   }
 
@@ -371,7 +382,9 @@ class AnaliticaController extends GetxController {
     'latitud': ControllerAlarma.currentPosition.value!.latitude,
     'longitud': ControllerAlarma.currentPosition.value!.longitude,
     'cel_emergencia': int.parse(box.read('user_number')),
-    'cel_contacto': int.parse(box.read('emergency_cel_mobile'))};
+    'cel_contacto': int.parse(box.read('emergency_cel_mobile')),
+    'account_sid': 'AC1470c1d92d0855b8a7a6d153d27dfb16',
+    'auth_token': 'c90b8fd8a151a7591114fd0de78915e3'};
     String jsonStringAlerta = jsonEncode(jsonData);  // Convierte el mapa a una cadena JSON
     var urlbpm = '$baseUrl/alerta/info';
     var responseBpm = await http.post(Uri.parse(urlbpm), body: jsonStringAlerta, headers: headers);

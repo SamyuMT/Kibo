@@ -117,6 +117,8 @@ class Overlay extends StatelessWidget {
               return SizedBox(
                 child: Column(
                   children: [
+                    ModulesSimulador(controller: controller),
+                    ModulesNormal(controller: controller),
                     ModuleTestAlarm(
                       controller: controller,
                       useStateOn: true,
@@ -164,7 +166,8 @@ class Overlay extends StatelessWidget {
               );
             }),
             const SizedBox(height: 8),
-            BotonPrueba(controller: controller)
+            BotonPrueba(controller: controller),
+
           ],
         ),
       ),
@@ -529,6 +532,111 @@ class Modulestest extends StatelessWidget {
     );
   }
 }
+
+class ModulesSimulador extends StatelessWidget {
+  final AjusteAlarmaController controller;
+
+  const ModulesSimulador({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints.expand(height: 40),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 0.50,
+            color: Colors.black.withOpacity(0.2),
+          ),
+        ),
+        color: AppColors.blanco,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(
+            height: 24,
+            width: 216,
+            child: Text(
+              'Habilitar Simulador',
+              style: TextStyle(
+                color: AppColors.negro,
+                fontSize: 16,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+          Obx(() {
+            return StateOn(
+                state: controller.isSimulador.value,
+                controller: controller,
+                id: 'Si' // Identificador único para cada switch
+            );
+          }),
+        ],
+      ),
+
+
+    );
+  }
+}
+
+class ModulesNormal extends StatelessWidget {
+  final AjusteAlarmaController controller;
+
+  const ModulesNormal({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints.expand(height: 40),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 0.50,
+            color: Colors.black.withOpacity(0.2),
+          ),
+        ),
+        color: AppColors.blanco,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(
+            height: 24,
+            width: 216,
+            child: Text(
+              'Simulador con riesgo',
+              style: TextStyle(
+                color: AppColors.negro,
+                fontSize: 16,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+          Obx(() {
+            return StateOn(
+                state: controller.isRiesgo.value,
+                controller: controller,
+                id: 'Ri' // Identificador único para cada switch
+            );
+          }),
+        ],
+      ),
+
+
+    );
+  }
+}
+
 
 class StateOn extends StatelessWidget {
   final AjusteAlarmaController controller;

@@ -101,6 +101,8 @@ class AjusteAlarmaController extends GetxController {
   var isAle = false.obs;
   var isF = false.obs;
   var isf = false.obs;
+  var isSimulador = false.obs;
+  var isRiesgo = false.obs;
 
   // Función para cambiar el estado del mapa y obtener la ubicación
   void toggleMap(bool value) {
@@ -211,6 +213,18 @@ class AjusteAlarmaController extends GetxController {
     print('f: ${isf.value}');
   }
 
+  // Función que cambia el estado del switch
+  void toggleSimulador(bool value) {
+    isSimulador.value = value;
+    print('f: ${isSimulador.value}');
+  }
+
+  // Función que cambia el estado del switch
+  void toggleRiesgo(bool value) {
+    isRiesgo.value = value;
+    print('f: ${isRiesgo.value}');
+  }
+
   // Función que cambia el estado del switch según el id
   void toggleState(String id, bool value) {
     if (id == 'Alarma') {
@@ -231,6 +245,11 @@ class AjusteAlarmaController extends GetxController {
       toggleF(value); // Supongamos que 'F' corresponde a isF
     } else if (id == 'f') {
       togglef(value); // Supongamos que 'f' corresponde a isf
+    } else if (id == 'Si') {
+      toggleSimulador(value);
+    } else if (id == 'Ri') {
+      toggleRiesgo(value);
     }
+
   }
 }
