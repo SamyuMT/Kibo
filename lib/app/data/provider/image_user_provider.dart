@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:get/get_connect/connect.dart';
 
-const baseUrl = 'http://10.0.2.2:5000';
+const baseUrl = 'https://bionovacali.xyz';
 
 class UserImageScreen extends GetConnect {
   Future<Uint8List?> getImageUser({required String imgUrl}) async {

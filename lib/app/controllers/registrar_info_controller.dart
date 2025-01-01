@@ -223,7 +223,7 @@ class RegistrarInfoController extends GetxController {
     );
 
     final String jsonString = jsonEncode(credential);
-    var baseUrl = 'http://10.0.2.2:5000';
+    var baseUrl = 'https://bionovacali.xyz';
     var urlCredential = '$baseUrl/set_credential/create';
     var headers = {'content-type': 'application/json'};
 

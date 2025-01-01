@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:get/get_connect/connect.dart';
 
-const baseUrl = 'http://10.0.2.2:5000';
+const baseUrl = 'https://bionovacali.xyz';
 
 class RegisterProvider extends GetConnect {
   Future<bool> getEmail({required String id}) async {

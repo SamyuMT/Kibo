@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:get/get_connect/connect.dart';
 
-const baseUrl = 'http://10.0.2.2:5000';
+const baseUrl = 'https://bionovacali.xyz';
 
 class NavbarProvider extends GetConnect {
   Future<Response> getUser({required String id}) async{
