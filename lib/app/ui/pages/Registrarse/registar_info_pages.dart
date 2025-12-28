@@ -169,11 +169,11 @@ class Bienvenido extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
+    return const Center(
+      child: SizedBox(
         width: 290, // Ancho máximo
         height: 96,
-        child: const Text(
+        child: Text(
           'Ya casi terminamos',
           textAlign: TextAlign.left,
           style: TextStyle(
@@ -552,7 +552,7 @@ class CustoTextField extends StatelessWidget {
   // Widget para el DropdownButtonFormField
   Widget _buildDropdown() {
     return DropdownButtonFormField<String>(
-      value: controller.value.isNotEmpty ? controller.value : null,
+      initialValue: controller.value.isNotEmpty ? controller.value : null,
       // Asignar valor inicial si existe
       onChanged: (value) {
         if (value != null) {

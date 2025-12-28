@@ -34,7 +34,7 @@ class HomeController extends GetxController {
     pairedDevices.clear();
 
     // Escanea dispositivos vinculados
-    List<BluetoothDevice> connectedDevices = await FlutterBluePlus.connectedDevices;
+    List<BluetoothDevice> connectedDevices = FlutterBluePlus.connectedDevices;
     pairedDevices.addAll(connectedDevices);
 
     // Escanea dispositivos disponibles
@@ -167,7 +167,7 @@ class HomeController extends GetxController {
                             ),
                           ),
                           snackPosition: SnackPosition.TOP, // Posición de la snackbar (opcional)
-                          duration: Duration(seconds: 3), // Duración de la snackbar (opcional)
+                          duration: const Duration(seconds: 3), // Duración de la snackbar (opcional)
                         );
                       }
                     },

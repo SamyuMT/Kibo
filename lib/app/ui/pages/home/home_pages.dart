@@ -72,7 +72,7 @@ class Central extends StatelessWidget {
               activate: controller.isBluetoothEnabled.value,
             );
           }),
-          Vincular(), // Aquí le pasamos el controlador
+          const Vincular(), // Aquí le pasamos el controlador
           // El widget Corazon también puede observar activate si es necesario
           Obx(() {
             return Corazon(

@@ -364,7 +364,7 @@ class CustoTextField extends StatelessWidget {
   // Widget para el DropdownButtonFormField
   Widget _buildDropdown() {
     return DropdownButtonFormField<String>(
-      value: controller.value.isNotEmpty ? controller.value : null,
+      initialValue: controller.value.isNotEmpty ? controller.value : null,
       // Asignar valor inicial si existe
       onChanged: (value) {
         if (value != null) {

@@ -1,12 +1,9 @@
-import 'dart:io';
 
 import 'package:kibo/app/controllers/user_controller.dart';
 import 'package:kibo/app/ui/utils/style_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class UserPage extends GetView<UserController> {
   const UserPage({super.key});

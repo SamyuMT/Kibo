@@ -151,14 +151,14 @@ class AjusteAlarmaController extends GetxController {
 
   void toggleBottomPrueba() {
     String fullName = box.read('user_full_name');
-    String Nombre_emergencia = box.read('emergency_full_name');
-    String telefono_emergencia = box.read('emergency_cel_mobile');
+    String nombreEmergencia = box.read('emergency_full_name');
+    String telefonoEmergencia = box.read('emergency_cel_mobile');
     String cedula = box.read('user_doc_number');
 
     // Datos de contacto de emergencia
     String emergencyContact = 'Contacto de emergencia:\n'
-        'Nombre: $Nombre_emergencia\n'
-        'Teléfono: $telefono_emergencia\n';
+        'Nombre: $nombreEmergencia\n'
+        'Teléfono: $telefonoEmergencia\n';
 
     // Información de emergencia
     String dataUser = 'Mi nombre es $fullName\n, '

@@ -16,44 +16,44 @@ abstract class AppPages {
   static final pages = [
     GetPage(
       name: Routes.LOGIN,
-      page: () => LoginPage(),
+      page: () => const LoginPage(),
     ),
     GetPage(
       name: Routes.STARTONE,
-      page: () => Start01Page(),
+      page: () => const Start01Page(),
     ),
     GetPage(
       name: Routes.LOGINREGISTER,
-      page: () => LoginorregisterPages(),
+      page: () => const LoginorregisterPages(),
     ),
     GetPage(
       name: Routes.HOME,
-      page: () => HomePage(),
+      page: () => const HomePage(),
     ),
     GetPage(
       name: Routes.ANALITICA,
-      page: () => AnaliticaPage(),
+      page: () => const AnaliticaPage(),
     ),
-    GetPage(name: Routes.NAVBAR, page: () => NavbarPage()),
+    GetPage(name: Routes.NAVBAR, page: () => const NavbarPage()),
     GetPage(
       name: Routes.AJUSTEALARMA,
-      page: () => AjusteAlarmaPage(),
+      page: () => const AjusteAlarmaPage(),
     ),
     GetPage(
       name: Routes.USER,
-      page: () => UserPage(),
+      page: () => const UserPage(),
     ),
     GetPage(
       name: Routes.AJUSTEUSER,
-      page: () => AjusteAlarmaPage(),
+      page: () => const AjusteAlarmaPage(),
     ),
     GetPage(
       name: Routes.REGISTRARSE,
-      page: () => RegistrarsePages(),
+      page: () => const RegistrarsePages(),
     ),
     GetPage(
       name: Routes.REGISTRARSEINFO,
-      page: () => RegistarInfoPages(),
+      page: () => const RegistarInfoPages(),
     ),
 
   ];

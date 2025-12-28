@@ -170,11 +170,11 @@ class HolaDeNuevo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
+    return const Center(
+      child: SizedBox(
         width: 208, // Ancho máximo
         height: 96,
-        child: const Text(
+        child: Text(
           '¡Hola de nuevo!',
           textAlign: TextAlign.center,
           style: TextStyle(

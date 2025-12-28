@@ -1,5 +1,4 @@
 import 'package:get_storage/get_storage.dart';
-import 'package:kibo/app/routes/pages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -7,6 +6,7 @@ import 'package:get/get.dart';
 class AjustesUserController extends GetxController {
   get formKeyAnalitica => GlobalKey<FormState>();
 
+  @override
   void onReady() {
     final box = GetStorage();
     generoText.value = box.read('user_gender');

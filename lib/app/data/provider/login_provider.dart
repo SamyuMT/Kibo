@@ -1,7 +1,5 @@
-import 'dart:convert';
 
 import 'package:get/get_connect/connect.dart';
-import 'package:kibo/app/data/model/credential/credential.dart';
 
 const baseUrl = 'https://bionovacali.xyz';
 

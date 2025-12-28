@@ -1,10 +1,9 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 
 abstract class AppColors {
   static const Color blanco = Color(0xffffffff);
 
-  static const Color transparente = Color(0xffffff);
+  static const Color transparente = Color(0x00ffffff);
 
   static const Color negro = Color(0xff000000);
 

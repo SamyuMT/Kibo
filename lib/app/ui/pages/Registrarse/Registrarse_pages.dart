@@ -1,5 +1,4 @@
 import 'package:flutter_svg/svg.dart';
-import 'package:kibo/app/controllers/login_controller.dart';
 import 'package:kibo/app/controllers/registrarse_controller.dart';
 import 'package:kibo/app/ui/utils/style_utils.dart';
 import 'package:flutter/material.dart';
@@ -578,11 +577,11 @@ class Bienvenido extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
+    return const Center(
+      child: SizedBox(
         width: 235, // Ancho máximo
         height: 96,
-        child: const Text(
+        child: Text(
           '¡Crea tu cuenta!',
           textAlign: TextAlign.center,
           style: TextStyle(

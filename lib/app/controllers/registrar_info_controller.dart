@@ -14,7 +14,6 @@ import 'package:kibo/app/data/model/user/user_data.dart';
 
 import '../data/model/credential/credential.dart';
 import '../data/model/credential/credential_data.dart';
-import '../data/model/medical_user/medical_user.dart';
 import '../data/repository/login_repository.dart';
 import '../data/repository/navbar_repository.dart';
 import '../routes/pages.dart';

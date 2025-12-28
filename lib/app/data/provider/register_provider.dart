@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:get/get_connect/connect.dart';
 
 const baseUrl = 'https://bionovacali.xyz';

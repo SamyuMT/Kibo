@@ -63,7 +63,8 @@ class _CentralState extends State<Central> {
   void initState() {
     super.initState();
     // Inicia la simulación al crear el widget
-    widget.controller.startHeartRateSimulation();}
+    widget.controller.startHeartRateSimulation();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,8 +126,6 @@ class Graph extends StatelessWidget {
   final AnaliticaController controller;
 
   const Graph({super.key, required this.controller});
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -202,7 +201,7 @@ class Tip extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(6),
             decoration: ShapeDecoration(
-              color: Color(0xFFECEAF8),
+              color: const Color(0xFFECEAF8),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(14.86),
               ),
@@ -216,7 +215,7 @@ class Tip extends StatelessWidget {
                   width: 18,
                   height: 18,
                   clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(),
+                  decoration: const BoxDecoration(),
                   child: SvgPicture.asset(
                     'assets/images/bxs_smile.svg',
                     color: AppColors.azul,
@@ -409,7 +408,7 @@ class HeartRete extends StatelessWidget {
                   ),
                 ],
               ),
-              Container(
+              SizedBox(
                 width: 110,
                 height: 46,
                 child: Row(

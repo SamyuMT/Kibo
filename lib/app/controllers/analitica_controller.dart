@@ -13,12 +13,13 @@ import 'dart:math'; // Importación para generar números aleatorios
 import 'package:csv/csv.dart';
 import 'package:http/http.dart' as http;
 
-
 class AnaliticaController extends GetxController {
   final ControllerAlarma = Get.find<AjusteAlarmaController>();
 
-  List<double> signalECGVectorRiesgo = []; // Vector con los datos cargados del archivo
-  List<double> signalECGVectorNormal = []; // Vector con los datos cargados del archivo
+  List<double> signalECGVectorRiesgo =
+      []; // Vector con los datos cargados del archivo
+  List<double> signalECGVectorNormal =
+      []; // Vector con los datos cargados del archivo
 
   int currentIndexVector = 0; // Índice para recorrer el vector
   int contadorV = 0;
@@ -31,7 +32,7 @@ class AnaliticaController extends GetxController {
   var heartRate = 20.obs; // Valor inicial de 100 bpm
   double signalECG = 0.0; // Ahora es double
   double signalBPM = 0.0;
-  
+
   var tendencia1 =
       ''.obs; // Usamos .obs si estamos usando GetX para observabilidad
   var tendencia2 =
@@ -45,7 +46,6 @@ class AnaliticaController extends GetxController {
   List<double> ecgLista = [];
   List<String> predLista = [];
   List<int> bpmLista = [];
-
 
   Timer? timer; // Temporizador para la lógica
   int windowSizeEcg = 1250; // 10 segundos (1250 datos)
@@ -77,24 +77,33 @@ class AnaliticaController extends GetxController {
   var baseUrl = 'https://bionovacali.xyz';
   var headers = {'content-type': 'application/json'};
 
-
   Future<void> loadHeartRateData() async {
     print("Cargando datos del archivo CSV...");
     try {
-      final String rawDataRiesgo = await rootBundle.loadString('assets/vector/full_tiempo_2760.00.csv');
-      List<List<dynamic>> csvTableRiesgo = const CsvToListConverter().convert(rawDataRiesgo);
+      final String rawDataRiesgo =
+          await rootBundle.loadString('assets/vector/full_tiempo_2760.00.csv');
+      List<List<dynamic>> csvTableRiesgo =
+          const CsvToListConverter().convert(rawDataRiesgo);
 
-      final String rawDataNormal = await rootBundle.loadString('assets/vector/vector.csv');
-      List<List<dynamic>> csvTableNormal = const CsvToListConverter().convert(rawDataNormal);
+      final String rawDataNormal =
+          await rootBundle.loadString('assets/vector/vector.csv');
+      List<List<dynamic>> csvTableNormal =
+          const CsvToListConverter().convert(rawDataNormal);
 
       // Asumiendo que el CSV es una sola fila de floats
-      signalECGVectorRiesgo = csvTableRiesgo[0].map((value) => double.parse(value.toString())).toList();
-      signalECGVectorNormal = csvTableNormal[0].map((value) => double.parse(value.toString())).toList();
+      signalECGVectorRiesgo = csvTableRiesgo[0]
+          .map((value) => double.parse(value.toString()))
+          .toList();
+      signalECGVectorNormal = csvTableNormal[0]
+          .map((value) => double.parse(value.toString()))
+          .toList();
 
-      if (signalECGVectorRiesgo.isNotEmpty && signalECGVectorNormal.isNotEmpty) {
-        print("Datos cargados correctamente. Total de muestras para vector con riesgo: ${signalECGVectorRiesgo.length}");
-        print("Datos cargados correctamente. Total de muestras para el vector normal: ${signalECGVectorNormal.length}");
-
+      if (signalECGVectorRiesgo.isNotEmpty &&
+          signalECGVectorNormal.isNotEmpty) {
+        print(
+            "Datos cargados correctamente. Total de muestras para vector con riesgo: ${signalECGVectorRiesgo.length}");
+        print(
+            "Datos cargados correctamente. Total de muestras para el vector normal: ${signalECGVectorNormal.length}");
       } else {
         print("Error: El archivo CSV está vacío.");
       }
@@ -103,36 +112,34 @@ class AnaliticaController extends GetxController {
     }
   }
 
-
   Future<void> _processAndSendEcg() async {
     // Verifica si hay suficientes datos para enviar
     if (ecgQueue.length >= windowSizeEcg) {
       List<double> ecgToSend = ecgQueue.toList();
       // Envía los datos a la API
       Map<String, dynamic> jsonData = {'data': ecgToSend};
-      String jsonStringEcg = jsonEncode(
-          jsonData); // Convierte el mapa a una cadena JSON
+      String jsonStringEcg =
+          jsonEncode(jsonData); // Convierte el mapa a una cadena JSON
 
       print(
           ecgToSend.length); // Esto imprimirá la cantidad de claves en el mapa
       var urlbpm = '$baseUrl/set_ecg/prediccion';
-      var responseEcg = await http.post(
-          Uri.parse(urlbpm), body: jsonStringEcg, headers: headers);
+      var responseEcg = await http.post(Uri.parse(urlbpm),
+          body: jsonStringEcg, headers: headers);
       String predicionEcg = responseEcg.body;
-      predicionEcg = predicionEcg.replaceAll('"', '')
+      predicionEcg = predicionEcg
+          .replaceAll('"', '')
           .trim(); // Elimina las comillas y espacios adicionales
       box.write('ecgPred', predicionEcg);
       predLista.add(box.read('ecgPred'));
       if (predicionEcg == "N") {
         startRiskSimulation(1);
-      }
-      else {
+      } else {
         startRiskSimulation(0);
       }
       alarmaPrediccion();
     }
   }
-
 
   Future<void> _processAndSendBmp() async {
     // Verifica si hay suficientes datos para enviar
@@ -140,11 +147,14 @@ class AnaliticaController extends GetxController {
       List<double> bmpToSend = bpmQueue.toList();
       // Envía los datos a la API
       Map<String, dynamic> jsonData = {'data': bmpToSend};
-      String jsonString = jsonEncode(jsonData);  // Convierte el mapa a una cadena JSON
+      String jsonString =
+          jsonEncode(jsonData); // Convierte el mapa a una cadena JSON
 
-      print(bmpToSend.length);  // Esto imprimirá la cantidad de claves en el mapa
+      print(
+          bmpToSend.length); // Esto imprimirá la cantidad de claves en el mapa
       var urlbpm = '$baseUrl/set_bpm/prediccion';
-      var responseBpm = await http.post(Uri.parse(urlbpm), body: jsonString, headers: headers);
+      var responseBpm = await http.post(Uri.parse(urlbpm),
+          body: jsonString, headers: headers);
       heartRate.value = int.parse(responseBpm.body);
       bpmLista.add(heartRate.value);
       startTendenciaSimulation();
@@ -154,17 +164,17 @@ class AnaliticaController extends GetxController {
   Future<void> _guardarDatos() async {
     // Envía los datos a la API
     Map<String, dynamic> jsonData = {
-    'id': box.read('id'),
-    'ecg': ecgLista,
-    'bpm': bpmLista,
-    'pred':predLista};
-    String dataEviar = jsonEncode(jsonData);  // Convierte el mapa a una cadena JSON
+      'id': box.read('id'),
+      'ecg': ecgLista,
+      'bpm': bpmLista,
+      'pred': predLista
+    };
+    String dataEviar =
+        jsonEncode(jsonData); // Convierte el mapa a una cadena JSON
     var urlbpm = '$baseUrl/data_ecg/info';
-    var responseBpm = await http.post(Uri.parse(urlbpm), body: dataEviar, headers: headers);
+    var responseBpm =
+        await http.post(Uri.parse(urlbpm), body: dataEviar, headers: headers);
   }
-
-
-
 
   void updateHeartRateHistory1() {
     if (heartRateHistory1.length >= 10) {
@@ -175,19 +185,17 @@ class AnaliticaController extends GetxController {
   }
 
   void startTendenciaSimulation() {
-    if (heartRate.value > 90){
+    if (heartRate.value > 90) {
       tendencia1.value = tendenciasLinea1[2];
       tendencia2.value = tendenciasLinea2[2];
-    }else if (heartRate.value > 50){
+    } else if (heartRate.value > 50) {
       tendencia1.value = tendenciasLinea1[1];
       tendencia2.value = tendenciasLinea2[1];
-    }else{
+    } else {
       tendencia1.value = tendenciasLinea1[0];
       tendencia2.value = tendenciasLinea2[0];
     }
-
   }
-
 
   // Simulación de frecuencia cardíaca cada 1 segundo con valores aleatorios entre 20 y 150
   void startHeartRateSimulation() {
@@ -204,15 +212,17 @@ class AnaliticaController extends GetxController {
         seconds = 0;
       }
 
-      signalECG = double.tryParse(dataBt.value) ?? (ControllerAlarma.isRiesgo.value
-          ? signalECGVectorRiesgo[currentIndexVector]
-          : signalECGVectorNormal[currentIndexVector]);
-      signalBPM =  double.tryParse(dataBt.value) ?? (ControllerAlarma.isRiesgo.value
-          ? signalECGVectorRiesgo[currentIndexVector]
-          : signalECGVectorNormal[currentIndexVector]);
+      signalECG = double.tryParse(dataBt.value) ??
+          (ControllerAlarma.isRiesgo.value
+              ? signalECGVectorRiesgo[currentIndexVector]
+              : signalECGVectorNormal[currentIndexVector]);
+      signalBPM = double.tryParse(dataBt.value) ??
+          (ControllerAlarma.isRiesgo.value
+              ? signalECGVectorRiesgo[currentIndexVector]
+              : signalECGVectorNormal[currentIndexVector]);
       currentIndexVector++;
 
-      if(dataBt.value != "" || ControllerAlarma.isSimulador.value){
+      if (dataBt.value != "" || ControllerAlarma.isSimulador.value) {
         ventanaGuardar++;
         // Agrega el dato a la cola
         ecgQueue.add(signalECG);
@@ -251,7 +261,8 @@ class AnaliticaController extends GetxController {
           predLista.clear();
           ecgLista.clear();
           bpmLista.clear();
-          print("Las listas han sido vaciadas. Preparadas para los siguientes 5 minutos.");
+          print(
+              "Las listas han sido vaciadas. Preparadas para los siguientes 5 minutos.");
         }
 
         _processAndSendEcg();
@@ -262,22 +273,21 @@ class AnaliticaController extends GetxController {
 
   // Simulación automática del cambio de riesgo (cada 5 segundos)
   void startRiskSimulation(int i) {
-    if(i == 1){
+    if (i == 1) {
       isLowRisk.value = true;
-    }
-    else {
+    } else {
       isLowRisk.value = false; // Alterna el estado de riesgo
     }
   }
 
 // Función que verifica y genera la alarma
   void alarmaPrediccion() {
-    String pred = box.read('ecgPred');  // Leer la predicción
+    String pred = box.read('ecgPred'); // Leer la predicción
 
     // Si la predicción es "V", incrementamos el contador para la Contracción Ventricular
     if (pred == "V") {
       contadorV++;
-      contadorF = 0;  // Resetear contadores de otras predicciones
+      contadorF = 0; // Resetear contadores de otras predicciones
       contadorf = 0;
       contadorI = 0;
       contadorN = 0;
@@ -285,7 +295,7 @@ class AnaliticaController extends GetxController {
     // Si la predicción es "!", incrementamos el contador para la Onda de Aleteo (VFL)
     else if (pred == "!") {
       contadorI++;
-      contadorV = 0;  // Resetear contadores de otras predicciones
+      contadorV = 0; // Resetear contadores de otras predicciones
       contadorf = 0;
       contadorF = 0;
       contadorN = 0;
@@ -293,7 +303,7 @@ class AnaliticaController extends GetxController {
     // Si la predicción es "F", incrementamos el contador para la Fusión Ventricular-Normal
     else if (pred == "F") {
       contadorF++;
-      contadorV = 0;  // Resetear contadores de otras predicciones
+      contadorV = 0; // Resetear contadores de otras predicciones
       contadorf = 0;
       contadorI = 0;
       contadorN = 0;
@@ -301,7 +311,7 @@ class AnaliticaController extends GetxController {
     // Si la predicción es "f", incrementamos el contador para la Fusión Rítmica-Normal
     else if (pred == "f") {
       contadorf++;
-      contadorV = 0;  // Resetear contadores de otras predicciones
+      contadorV = 0; // Resetear contadores de otras predicciones
       contadorF = 0;
       contadorI = 0;
       contadorN = 0;
@@ -309,23 +319,24 @@ class AnaliticaController extends GetxController {
     // Si la predicción es "N", incrementamos el contador para predicciones Normales
     else if (pred == "N") {
       contadorN++;
-      contadorV = 0;  // Resetear contadores de otras predicciones
+      contadorV = 0; // Resetear contadores de otras predicciones
       contadorF = 0;
       contadorf = 0;
       contadorI = 0;
     }
     String fullName = box.read('user_full_name');
-    String Nombre_emergencia = box.read('emergency_full_name');
-    String telefono_emergencia = box.read('emergency_cel_mobile');
+    String nombreEmergencia = box.read('emergency_full_name');
+    String telefonoEmergencia = box.read('emergency_cel_mobile');
     String aseguradora = box.read('medical_insurance');
-    String tipo_asugarora = box.read('medical_type_link');
+    String tipoAsugarora = box.read('medical_type_link');
     String hospital = box.read('doctor_institution');
     String cedula = box.read('user_doc_number');
     String tipoCedula = box.read('user_type_doc');
 
     // Obtener la fecha y hora actuales
     DateTime now = DateTime.now();
-    String dateTimeNow = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} '
+    String dateTimeNow =
+        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} '
         '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}';
 
     // Información de emergencia
@@ -342,52 +353,58 @@ class AnaliticaController extends GetxController {
 
     // Datos de contacto de emergencia
     String emergencyContact = 'Contacto de emergencia:\n'
-        'Nombre: $Nombre_emergencia\n'
-        'Teléfono: $telefono_emergencia\n';
+        'Nombre: $nombreEmergencia\n'
+        'Teléfono: $telefonoEmergencia\n';
 
     // Información adicional sobre la aseguradora y el hospital
     String medicalInfo = 'Mi aseguradora es $aseguradora, '
-        'mi tipo de aseguradora es $tipo_asugarora, '
+        'mi tipo de aseguradora es $tipoAsugarora, '
         'el hospital donde me atienden es $hospital.\n';
 
 // Construcción del mensaje completo
-    String fullMessage = '$dataUser$locationMessage$emergencyContact$medicalInfo';
+    String fullMessage =
+        '$dataUser$locationMessage$emergencyContact$medicalInfo';
 
     // Generamos la alarma si se cumple el número de repeticiones consecutivas
-    if (contadorV >= 5 && ControllerAlarma.isV.value) {  // 5 ventanas consecutivas para "V"
+    if (contadorV >= 5 && ControllerAlarma.isV.value) {
+      // 5 ventanas consecutivas para "V"
       generarAlarma("$fullMessage\n"
           "Alerta: Contracción Ventricular Prematura (V)");
-          ControllerAlarma.toggleBottomPrueba();
-    } else if (contadorI >= 4 && ControllerAlarma.isAle.value) {  // 4 ventanas consecutivas para "!"
+      ControllerAlarma.toggleBottomPrueba();
+    } else if (contadorI >= 4 && ControllerAlarma.isAle.value) {
+      // 4 ventanas consecutivas para "!"
       generarAlarma("$fullMessage\n"
           "Alerta: Onda de Aleteo Ventricular (VFL)");
       ControllerAlarma.toggleBottomPrueba();
-
-    } else if (contadorF >= 3 && ControllerAlarma.isF.value) {  // 3 ventanas consecutivas para "F"
+    } else if (contadorF >= 3 && ControllerAlarma.isF.value) {
+      // 3 ventanas consecutivas para "F"
       generarAlarma("$fullMessage\n"
           "Alerta: Fusión Ventricular-Normal (F)");
       ControllerAlarma.toggleBottomPrueba();
-
-    } else if (contadorf >= 3 && ControllerAlarma.isf.value) {  // 3 ventanas consecutivas para "f"
+    } else if (contadorf >= 3 && ControllerAlarma.isf.value) {
+      // 3 ventanas consecutivas para "f"
       generarAlarma("$fullMessage\n"
           "Alerta: Fusión Rítmo-Normal (f)");
       ControllerAlarma.toggleBottomPrueba();
-
     }
   }
 
   // Función para generar la alarma (puede ser un sonido, mensaje o indicador visual)
   Future<void> generarAlarma(String mensaje) async {
-    Map<String, dynamic> jsonData = {'data': mensaje,
-    'latitud': ControllerAlarma.currentPosition.value!.latitude,
-    'longitud': ControllerAlarma.currentPosition.value!.longitude,
-    'cel_emergencia': int.parse(box.read('user_number')),
-    'cel_contacto': int.parse(box.read('emergency_cel_mobile')),
-    'account_sid': 'AC1470c1d92d0855b8a7a6d153d27dfb16',
-    'auth_token': 'c90b8fd8a151a7591114fd0de78915e3'};
-    String jsonStringAlerta = jsonEncode(jsonData);  // Convierte el mapa a una cadena JSON
+    Map<String, dynamic> jsonData = {
+      'data': mensaje,
+      'latitud': ControllerAlarma.currentPosition.value!.latitude,
+      'longitud': ControllerAlarma.currentPosition.value!.longitude,
+      'cel_emergencia': int.parse(box.read('user_number')),
+      'cel_contacto': int.parse(box.read('emergency_cel_mobile')),
+      'account_sid': 'AC1470c1d92d0855b8a7a6d153d27dfb16',
+      'auth_token': 'c90b8fd8a151a7591114fd0de78915e3'
+    };
+    String jsonStringAlerta =
+        jsonEncode(jsonData); // Convierte el mapa a una cadena JSON
     var urlbpm = '$baseUrl/alerta/info';
-    var responseBpm = await http.post(Uri.parse(urlbpm), body: jsonStringAlerta, headers: headers);
+    var responseBpm = await http.post(Uri.parse(urlbpm),
+        body: jsonStringAlerta, headers: headers);
   }
 }
 
@@ -398,9 +415,10 @@ class ChartData1 {
   ChartData1(this.time, this.value);
 }
 
-
 class HeartRateChart1 extends StatelessWidget {
-  final AnaliticaController controller = Get.put(AnaliticaController());
+  final AnaliticaController controller = Get.find<AnaliticaController>();
+
+  HeartRateChart1({super.key});
 
   @override
   Widget build(BuildContext context) {

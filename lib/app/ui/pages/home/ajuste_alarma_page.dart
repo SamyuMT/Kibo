@@ -194,17 +194,17 @@ class BotonPrueba extends StatelessWidget {
           controller.toggleBottomPrueba();
         },
         style: ButtonStyle(
-          padding: MaterialStateProperty.all(const EdgeInsets.all(16)),
-          shape: MaterialStateProperty.all(
+          padding: WidgetStateProperty.all(const EdgeInsets.all(16)),
+          shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
           ),
-          backgroundColor: MaterialStateProperty.all(
+          backgroundColor: WidgetStateProperty.all(
               AppColors.principal.colors.first // Color cuando está habilitado
               ),
-          shadowColor: MaterialStateProperty.all(const Color(0xCCCBD6FF)),
-          elevation: MaterialStateProperty.all(10),
+          shadowColor: WidgetStateProperty.all(const Color(0xCCCBD6FF)),
+          elevation: WidgetStateProperty.all(10),
         ),
         child: const Text(
           'Realizar Prueba',
@@ -229,12 +229,12 @@ class CustomTextField extends StatelessWidget {
   final bool isScrollable; // Permitir el desplazamiento si es necesario
 
   const CustomTextField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.hintText,
     this.maxLines = 1,
     this.isScrollable = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -386,7 +386,7 @@ class _CustomCheckboxState extends State<CustomCheckbox> {
           ? const Color(0xFFD2D2D2)
           : AppColors.blanco; // Disabled con check o sin check
     } else {
-      checkboxColor = widget.isChecked ? Colors.blue : Color(0xFFBABDC2);
+      checkboxColor = widget.isChecked ? Colors.blue : const Color(0xFFBABDC2);
       checkboxColorBack =
           widget.isChecked ? Colors.blue : AppColors.blanco; // Activo
     }
@@ -677,9 +677,9 @@ class StateOn extends StatelessWidget {
               onChanged: (value) {
                 controller.toggleState(id, value); // Pasa el id y el valor
               },
-              trackColor: const Color(0xFFCECECE),
+              inactiveTrackColor: const Color(0xFFCECECE),
               // Color Off
-              activeColor: const Color(0xFFFF362E),
+              activeTrackColor: const Color(0xFFFF362E),
               // Color On
               thumbColor: AppColors.blanco, // Color del thumb
             ),

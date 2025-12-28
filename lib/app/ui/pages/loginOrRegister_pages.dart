@@ -90,16 +90,16 @@ class Inferior extends StatelessWidget {
             style: ButtonStyle(
               // Define las restricciones del botón
               minimumSize:
-                  MaterialStateProperty.all(const Size(double.infinity, 56)),
+                  WidgetStateProperty.all(const Size(double.infinity, 56)),
               // Aplica el mismo estilo decorativo
-              shape: MaterialStateProperty.all(
+              shape: WidgetStateProperty.all(
                 RoundedRectangleBorder(
                   side: const BorderSide(width: 1, color: Colors.white),
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
               // Estilo de fondo del botón
-              backgroundColor: MaterialStateProperty.all(Colors.transparent),
+              backgroundColor: WidgetStateProperty.all(Colors.transparent),
             ),
             child: const Text(
               'INICIAR SESIÓN',
@@ -122,18 +122,18 @@ class Inferior extends StatelessWidget {
             style: ButtonStyle(
               // Define el tamaño del botón
               minimumSize:
-                  MaterialStateProperty.all(const Size(double.infinity, 56)),
+                  WidgetStateProperty.all(const Size(double.infinity, 56)),
               // Define la forma y el borde del botón
-              shape: MaterialStateProperty.all(
+              shape: WidgetStateProperty.all(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                   side: const BorderSide(color: AppColors.blanco),
                 ),
               ),
               // Define el color de fondo
-              backgroundColor: MaterialStateProperty.all(AppColors.blanco),
+              backgroundColor: WidgetStateProperty.all(AppColors.blanco),
               // Aplica el comportamiento de clip
-              overlayColor: MaterialStateProperty.all(AppColors.gris),
+              overlayColor: WidgetStateProperty.all(AppColors.gris),
             ),
             child: const Text(
               'REGISTRARSE',
@@ -189,7 +189,7 @@ class SocialMedia extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Row(
         mainAxisSize: MainAxisSize.min,

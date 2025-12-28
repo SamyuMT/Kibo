@@ -1,5 +1,4 @@
 import 'package:get_storage/get_storage.dart';
-import 'package:kibo/app/data/provider/login_provider.dart';
 import 'package:kibo/app/data/repository/login_repository.dart';
 import 'package:kibo/app/routes/pages.dart';
 import 'package:flutter/material.dart';
@@ -174,6 +173,7 @@ class LoginController extends GetxController {
   }
 
 
+  @override
   void onClose() {
     // Asegúrate de limpiar los controladores al cerrar el controlador
     UserController.dispose();
