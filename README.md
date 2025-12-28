@@ -111,7 +111,29 @@ git clone https://github.com/SamyuMT/Kibo.git
 cd Kibo
 ```
 
-### 2. Configurar Entorno Flutter
+### 2. Configurar Variables de Entorno
+
+Es **OBLIGATORIO** configurar las variables de entorno antes de ejecutar la aplicación.
+
+```bash
+# Copiar el archivo de ejemplo
+cp .env.example .env
+
+# Editar el archivo .env con tus credenciales reales
+# IMPORTANTE: Nunca commits .env al repositorio
+nano .env
+```
+
+Variables requeridas:
+- `API_BASE_URL`: URL del servidor API
+- `API_KEY`: Clave de autenticación de la API
+- `TWILIO_ACCOUNT_SID`: ID de cuenta de Twilio (para alertas)
+- `TWILIO_AUTH_TOKEN`: Token de Twilio
+- `GOOGLE_MAPS_API_KEY`: Clave de Google Maps
+
+👉 **[Ver guía completa de configuración](./ENV_SETUP.md)**
+
+### 3. Configurar Entorno Flutter
 
 ```bash
 # Actualizar Flutter a la versión más reciente
@@ -122,7 +144,7 @@ flutter doctor -v
 flutter pub get
 ```
 
-### 3. Configurar Gradle (Android)
+### 4. Configurar Gradle (Android)
 
 El proyecto está configurado con:
 - **Android Gradle Plugin (AGP)**: 8.6.0
@@ -140,7 +162,7 @@ flutter clean
 flutter pub get
 ```
 
-### 4. Configurar iOS (si es necesario)
+### 5. Configurar iOS (si es necesario)
 
 ```bash
 cd ios
@@ -148,7 +170,7 @@ pod install --repo-update
 cd ..
 ```
 
-### 5. Generar Código
+### 6. Generar Código
 
 El proyecto utiliza `json_serializable` para modelos. Generar archivos automáticamente:
 
@@ -162,7 +184,7 @@ O en modo watch (generación automática en cambios):
 flutter pub run build_runner watch --delete-conflicting-outputs
 ```
 
-### 6. Configurar Variables de Entorno
+### 7. Configurar Variables de Entorno
 
 Crear archivo `local.properties` en la raíz de Android:
 

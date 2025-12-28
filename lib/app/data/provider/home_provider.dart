@@ -1,6 +1,6 @@
-
 import 'package:get/get_connect/connect.dart';
+import 'package:kibo/app/config/app_config.dart';
 
-const baseUrl = 'http://gerador-nomes.herokuapp.com/nomes/10';
-
-class HomeProvider extends GetConnect {}
+class HomeProvider extends GetConnect {
+  // Usa AppConfig.apiBaseUrl y AppConfig.defaultHeaders para las peticiones HTTP
+}

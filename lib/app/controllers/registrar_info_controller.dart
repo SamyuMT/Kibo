@@ -4,13 +4,13 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:kibo/app/config/app_config.dart';
 import 'package:kibo/app/data/model/doctor_user/doctor_user.dart';
 import 'package:kibo/app/data/model/doctor_user/doctor_user_data.dart';
 import 'package:kibo/app/data/model/emergency_user/emergency_user_data.dart';
 import 'package:kibo/app/data/model/info_user/info_user_data.dart';
 import 'package:kibo/app/data/model/medical_user/medical_user_data.dart';
 import 'package:kibo/app/data/model/user/user_data.dart';
-
 
 import '../data/model/credential/credential.dart';
 import '../data/model/credential/credential_data.dart';
@@ -21,7 +21,6 @@ import '../routes/pages.dart';
 class RegistrarInfoController extends GetxController {
   get formKeyRegistrarseInfo => null;
   NavbarRepository navbarRepository = NavbarRepository();
-
 
   void backLoginRegister() {
     clear();
@@ -67,7 +66,6 @@ class RegistrarInfoController extends GetxController {
   var especialidadMedicoTextEmergencia = ''.obs;
   var correoTextEmergencia = ''.obs;
   var hospitalResidenteTextEmergencia = ''.obs;
-
 
   List<String> generosList = ['Masculino', 'Femenino', 'Ninguno'];
   List<String> tipoVinculacion = ['Cotizante', 'Beneficiario'];
@@ -159,7 +157,7 @@ class RegistrarInfoController extends GetxController {
   ];
   List<String> aseguradoraList = ['Sura', 'AsmetSalud'];
 
-  Future<void> guardarDatos() async{
+  Future<void> guardarDatos() async {
     final box = GetStorage();
 
     box.write('user_name', nombreText.value);
@@ -167,7 +165,6 @@ class RegistrarInfoController extends GetxController {
     box.write('user_nickname', nickName.value);
     box.write('user_rol', rol.value);
     box.write('user_img_url', 'User_icon.png');
-
 
     box.write('user_city', municipioOCiudadText.value);
     box.write('user_departament', departamentoText.value);
@@ -178,7 +175,6 @@ class RegistrarInfoController extends GetxController {
     box.write('user_street_number', calleText.value);
     box.write('user_type_doc', tipoDocumentoText.value);
     box.write('user_type_street', tipoDeCalleText.value);
-
 
     box.write('emergency_cel_mobile', numeroCelularTextEmergencia.value);
     box.write('emergency_city', municipioOCiudadTextEmergencia.value);
@@ -194,10 +190,8 @@ class RegistrarInfoController extends GetxController {
     box.write('emergency_type_doc', tipoDocumentoTextEmergencia.value);
     box.write('emergency_type_street', tipoDeCalleTextEmergencia.value);
 
-
     box.write('medical_insurance', aseguradoraTextEmergencia.value);
     box.write('medical_type_link', tipoVinculacionTextEmergencia.value);
-
 
     box.write('doctor_institution', hospitalResidenteTextEmergencia.value);
     box.write('doctor_name', nombreMedicoTextEmergencia.value);
@@ -205,7 +199,6 @@ class RegistrarInfoController extends GetxController {
 
     box.write('doctor_specialty', especialidadMedicoTextEmergencia.value);
     box.write('doctor_email', correoTextEmergencia.value);
-
 
     //Crear Credenciales Usuario
     var credentialData = CredentialData(
@@ -222,23 +215,22 @@ class RegistrarInfoController extends GetxController {
     );
 
     final String jsonString = jsonEncode(credential);
-    var baseUrl = 'https://bionovacali.xyz';
-    var urlCredential = '$baseUrl/set_credential/create';
-    var headers = {'content-type': 'application/json'};
+    var urlCredential = '${AppConfig.apiBaseUrl}/set_credential/create';
 
-    await http.post(Uri.parse(urlCredential), body: jsonString, headers: headers).then((http.Response response) {
+    await http
+        .post(Uri.parse(urlCredential),
+            body: jsonString, headers: AppConfig.defaultHeaders)
+        .then((http.Response response) {
       print("Response status: ${response.statusCode}");
       print("Response body: ${response.contentLength}");
       print(response.headers);
       print(response.request);
     });
 
-    Credential body = await loginRepository.getDataCredential(credential: box.read('user_email'),
-        pass: box.read('user_pass'));
+    Credential body = await loginRepository.getDataCredential(
+        credential: box.read('user_email'), pass: box.read('user_pass'));
     box.write('id', body.data.id);
     print(body.data.id);
-
-
 
     // Crear User
     var userData = UserData(
@@ -249,20 +241,19 @@ class RegistrarInfoController extends GetxController {
         rol: box.read('user_rol'),
         state: true);
 
-    var mapUser = jsonEncode({'data': userData,
-      'id': box.read('id')});
+    var mapUser = jsonEncode({'data': userData, 'id': box.read('id')});
 
-    var urlUser= '$baseUrl/set_user/create';
+    var urlUser = '${AppConfig.apiBaseUrl}/set_user/create';
 
-
-    await http.post(Uri.parse(urlUser), body: mapUser, headers: headers).then((http.Response response) {
+    await http
+        .post(Uri.parse(urlUser),
+            body: mapUser, headers: AppConfig.defaultHeaders)
+        .then((http.Response response) {
       print("Response status: ${response.statusCode}");
       print("Response body: ${response.contentLength}");
       print(response.headers);
       print(response.request);
     });
-
-
 
     // Crar info User
     var infoUser = InfoUserData(
@@ -277,21 +268,19 @@ class RegistrarInfoController extends GetxController {
         type_doc: box.read('user_type_doc'),
         type_street: box.read('user_type_street'));
 
-    var mapInfoUser = jsonEncode({'data': infoUser,
-      'id': box.read('id')});
+    var mapInfoUser = jsonEncode({'data': infoUser, 'id': box.read('id')});
 
-    var urlUserInfo = '$baseUrl/set_user_info/create';
+    var urlUserInfo = '${AppConfig.apiBaseUrl}/set_user_info/create';
 
-
-    await http.post(Uri.parse(urlUserInfo), body: mapInfoUser, headers: headers).then((http.Response response) {
+    await http
+        .post(Uri.parse(urlUserInfo),
+            body: mapInfoUser, headers: AppConfig.defaultHeaders)
+        .then((http.Response response) {
       print("Response status: ${response.statusCode}");
       print("Response body: ${response.contentLength}");
       print(response.headers);
       print(response.request);
     });
-
-
-
 
     // Crear infor emergencia
     var emergencyUser = EmergencyUserData(
@@ -310,19 +299,20 @@ class RegistrarInfoController extends GetxController {
         type_doc: box.read('emergency_type_doc'),
         type_street: box.read('emergency_type_street'));
 
-    var mapEmergencyUser = jsonEncode({'data': emergencyUser,
-      'id': box.read('id')});
+    var mapEmergencyUser =
+        jsonEncode({'data': emergencyUser, 'id': box.read('id')});
 
-    var urlUserEmergency = '$baseUrl/set_emergency_info/create';
+    var urlUserEmergency = '${AppConfig.apiBaseUrl}/set_emergency_info/create';
 
-    await http.post(Uri.parse(urlUserEmergency), body: mapEmergencyUser, headers: headers).then((http.Response response) {
+    await http
+        .post(Uri.parse(urlUserEmergency),
+            body: mapEmergencyUser, headers: AppConfig.defaultHeaders)
+        .then((http.Response response) {
       print("Response status: ${response.statusCode}");
       print("Response body: ${response.contentLength}");
       print(response.headers);
       print(response.request);
     });
-
-
 
     // Crear doctor user
     var doctoUser = DoctorUserData(
@@ -334,23 +324,24 @@ class RegistrarInfoController extends GetxController {
         specialty: box.read('doctor_specialty'),
         state: true);
 
+    var mapDoctorUser = jsonEncode({'data': doctoUser, 'id': box.read('id')});
 
-    var mapDoctorUser = jsonEncode({'data': doctoUser,
-      'id': box.read('id')});
+    var urlDoctorUser = '${AppConfig.apiBaseUrl}/set_doctor/create';
 
-    var urlDoctorUser = '$baseUrl/set_doctor/create';
-
-    await http.post(Uri.parse(urlDoctorUser), body: mapDoctorUser, headers: headers).then((http.Response response) {
+    await http
+        .post(Uri.parse(urlDoctorUser),
+            body: mapDoctorUser, headers: AppConfig.defaultHeaders)
+        .then((http.Response response) {
       print("Response status: ${response.statusCode}");
       print("Response body: ${response.contentLength}");
       print(response.headers);
       print(response.request);
     });
 
-    DoctorUser medicalUserConsult = await navbarRepository.getDoctorUser(id: box.read('doctor_email'));
+    DoctorUser medicalUserConsult =
+        await navbarRepository.getDoctorUser(id: box.read('doctor_email'));
 
     print(medicalUserConsult.data.id);
-
 
     // crear info medical User
     var medicalUser = MedicalUserData(
@@ -359,18 +350,20 @@ class RegistrarInfoController extends GetxController {
         state: true,
         type_link: box.read('medical_type_link'));
 
-    var mapMedicalUser = jsonEncode({'data': medicalUser,
-      'id': box.read('id')});
+    var mapMedicalUser =
+        jsonEncode({'data': medicalUser, 'id': box.read('id')});
 
-    var urlMedicalUser = '$baseUrl/set_medical/create';
+    var urlMedicalUser = '${AppConfig.apiBaseUrl}/set_medical/create';
 
-    await http.post(Uri.parse(urlMedicalUser), body: mapMedicalUser, headers: headers).then((http.Response response) {
+    await http
+        .post(Uri.parse(urlMedicalUser),
+            body: mapMedicalUser, headers: AppConfig.defaultHeaders)
+        .then((http.Response response) {
       print("Response status: ${response.statusCode}");
       print("Response body: ${response.contentLength}");
       print(response.headers);
       print(response.request);
     });
-
 
     String locationMessage = 'Usuario Creado';
     // Imprimir el mensaje en la consola
@@ -378,13 +371,9 @@ class RegistrarInfoController extends GetxController {
         duration: const Duration(milliseconds: 6000));
     Get.toNamed(Routes.LOGIN);
     clear();
-
-
-
   }
+
   LoginRepository loginRepository = LoginRepository();
-
-
 
   void clear() {
     // Datos principales

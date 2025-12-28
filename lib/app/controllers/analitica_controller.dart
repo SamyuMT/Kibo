@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:kibo/app/controllers/ajuste_alarma_controller.dart';
+import 'package:kibo/app/config/app_config.dart';
 import 'package:kibo/app/ui/utils/style_utils.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -74,8 +75,16 @@ class AnaliticaController extends GetxController {
   RxString dataBt = ''.obs; // Observable para datos recibidos
   final box = GetStorage();
 
-  var baseUrl = 'https://bionovacali.xyz';
-  var headers = {'content-type': 'application/json'};
+  // Usar la configuración centralizada
+  late String baseUrl;
+  late Map<String, String> headers;
+
+  @override
+  void onInit() {
+    super.onInit();
+    baseUrl = AppConfig.apiBaseUrl;
+    headers = AppConfig.defaultHeaders;
+  }
 
   Future<void> loadHeartRateData() async {
     print("Cargando datos del archivo CSV...");
@@ -397,8 +406,6 @@ class AnaliticaController extends GetxController {
       'longitud': ControllerAlarma.currentPosition.value!.longitude,
       'cel_emergencia': int.parse(box.read('user_number')),
       'cel_contacto': int.parse(box.read('emergency_cel_mobile')),
-      'account_sid': 'AC1470c1d92d0855b8a7a6d153d27dfb16',
-      'auth_token': 'c90b8fd8a151a7591114fd0de78915e3'
     };
     String jsonStringAlerta =
         jsonEncode(jsonData); // Convierte el mapa a una cadena JSON

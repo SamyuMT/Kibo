@@ -1,12 +1,12 @@
 import 'package:get/get_connect/connect.dart';
-
-const baseUrl = 'https://bionovacali.xyz';
+import 'package:kibo/app/config/app_config.dart';
 
 class RegisterProvider extends GetConnect {
   Future<bool> getEmail({required String id}) async {
     try {
-      final result =  await get("$baseUrl/get_validar_email/info?email=$id").
-      timeout(const Duration(milliseconds: 8000));
+      final url = "${AppConfig.apiBaseUrl}/get_validar_email/info?email=$id";
+      final result = await get(url, headers: AppConfig.defaultHeaders)
+          .timeout(const Duration(milliseconds: 8000));
       bool validez = false;
       if (result.statusCode == 200) {
         print('Response status: ${result.body}');
@@ -24,8 +24,9 @@ class RegisterProvider extends GetConnect {
 
   Future<bool> getNumber({required String id}) async {
     try {
-      final result =  await get("$baseUrl/get_validar_number/info?number=$id").
-      timeout(const Duration(milliseconds: 8000));
+      final url = "${AppConfig.apiBaseUrl}/get_validar_number/info?number=$id";
+      final result = await get(url, headers: AppConfig.defaultHeaders)
+          .timeout(const Duration(milliseconds: 8000));
       bool validez = false;
       if (result.statusCode == 200) {
         print('Response status: ${result.body}');
@@ -40,5 +41,4 @@ class RegisterProvider extends GetConnect {
       throw 'Problemas de conexion';
     }
   }
-
 }
