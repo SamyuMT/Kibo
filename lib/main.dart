@@ -13,7 +13,7 @@ import 'app/ui/themes/light_theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Cargar variables de entorno
-  await dotenv.load(fileName: '.env');
+  // await dotenv.load(fileName: '.env');
 
   Get.put(AjusteAlarmaController());
   Get.put(AnaliticaController());

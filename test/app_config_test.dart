@@ -5,7 +5,7 @@ import 'package:kibo/app/config/app_config.dart';
 void main() {
   setUpAll(() async {
     // Load environment variables for testing
-    await dotenv.load(fileName: '.env');
+    // await dotenv.load(fileName: '.env');
   });
 
   group('AppConfig Tests', () {

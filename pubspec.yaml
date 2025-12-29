@@ -51,7 +51,7 @@ flutter:
 
   uses-material-design: true
   assets:
-    - .env
+    #- .env # Descomenta esta línea si usas flutter_dotenv
     - assets/images/
     - assets/sounds/
     - assets/vector/
